@@ -5,15 +5,16 @@ import 'package:get/get.dart';
 class NotifyHelper {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
+
   initializeNotification() async {
-    // For IOS Notifications
+    // For iOS Notifications
     final DarwinInitializationSettings initializationSettingsIOS =
         DarwinInitializationSettings(
             requestSoundPermission: false,
             requestBadgePermission: false,
             requestAlertPermission: false,
             onDidReceiveLocalNotification: onDidReceiveLocalNotification);
-    // For Android Notifictions
+    // For Android Notifications
     final AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings("appicon");
 
@@ -28,7 +29,7 @@ class NotifyHelper {
 
   Future onDidReceiveLocalNotification(
       int id, String? title, String? body, String? payload) async {
-    // display a dialog with the notification details, tap ok to go to another page
+    // Display a dialog with the notification details, tap ok to go to another page
     Get.dialog(Text("Welcome to Flutter"));
   }
 
@@ -57,18 +58,19 @@ class NotifyHelper {
         );
   }
 
-  displayNotification({required String title, required String body}) async {
-    print("doing test");
+  void displayNotification(
+      {required String title, required String body}) async {
+    print("Displaying notification");
     const AndroidNotificationDetails androidNotificationDetails =
-        AndroidNotificationDetails('your channel id', 'your channel name',
-            channelDescription: 'your channel description',
+        AndroidNotificationDetails('your_channel_id', 'your_channel_name',
+            channelDescription: 'your_channel_description',
             importance: Importance.max,
             priority: Priority.high,
-            ticker: 'ticker');
+            ticker: 'ticker',
+            icon: 'appicon'); // Explicitly set the icon here
     const NotificationDetails notificationDetails =
         NotificationDetails(android: androidNotificationDetails);
-    await flutterLocalNotificationsPlugin.show(
-        0, 'plain title', 'plain body', notificationDetails,
-        payload: 'item x');
+    await flutterLocalNotificationsPlugin
+        .show(0, title, body, notificationDetails, payload: 'item x');
   }
 }

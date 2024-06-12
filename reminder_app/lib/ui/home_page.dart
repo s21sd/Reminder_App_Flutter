@@ -1,4 +1,3 @@
-// Home Page
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reminder_app/services/notification_services.dart';
@@ -12,7 +11,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePage extends State<HomePage> {
-  var notifyHelper;
+  late NotifyHelper notifyHelper;
+
   @override
   void initState() {
     super.initState();
@@ -36,7 +36,7 @@ class _HomePage extends State<HomePage> {
     );
   }
 
-  _appBar() {
+  AppBar _appBar() {
     return AppBar(
       leading: GestureDetector(
         onTap: () {

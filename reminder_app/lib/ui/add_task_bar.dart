@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:reminder_app/ui/theme.dart';
 import 'package:reminder_app/ui/widgets/input_field.dart';
+import 'package:reminder_app/ui/widgets/buttons.dart';
 
 class AddTaskPage extends StatefulWidget {
   const AddTaskPage({super.key});
@@ -17,6 +18,9 @@ class _AddTaskPageState extends State<AddTaskPage> {
   String _startTime = DateFormat("hh:mm a").format(DateTime.now()).toString();
   int _selectedRemind = 5;
   List<int> remindList = [5, 10, 15, 20];
+  String _selectedRepeat = "None";
+  List<String> repeatList = ["None", "Daily", "Weekly", "Monthly"];
+  int _selectedColor = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -83,18 +87,68 @@ class _AddTaskPageState extends State<AddTaskPage> {
                 title: "Remind",
                 hint: "$_selectedRemind minutes early",
                 widget: DropdownButton(
-                  onChanged: ,
-                  items: remindList.map(),
+                  value: _selectedRemind,
+                  onChanged: (int? newValue) {
+                    setState(() {
+                      _selectedRemind = newValue!;
+                    });
+                  },
+                  items: remindList.map<DropdownMenuItem<int>>((int value) {
+                    return DropdownMenuItem<int>(
+                      value: value,
+                      child: Text(value.toString()),
+                    );
+                  }).toList(),
                   icon: const Icon(
                     Icons.keyboard_arrow_down,
                     color: Colors.grey,
                   ),
                   iconSize: 32,
                   elevation: 4,
+                  underline: Container(
+                    height: 0,
+                  ),
                   style: subTitleStyle,
                 ),
               ),
-              MyInputField(title: "Note", hint: "Enter your note"),
+              MyInputField(
+                title: "Repeat",
+                hint: _selectedRepeat,
+                widget: DropdownButton(
+                  value: _selectedRepeat,
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      _selectedRepeat = newValue!;
+                    });
+                  },
+                  items:
+                      repeatList.map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                        value: value, child: Text(value));
+                  }).toList(),
+                  icon: const Icon(
+                    Icons.keyboard_arrow_down,
+                    color: Colors.grey,
+                  ),
+                  iconSize: 32,
+                  elevation: 4,
+                  underline: Container(
+                    height: 0,
+                  ),
+                  style: subTitleStyle,
+                ),
+              ),
+              const SizedBox(height: 18),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _colorPallete(),
+                  MyButton(label: "Create Task", onTap: () => null),
+                ],
+              ),
+              SizedBox(
+                height: 40,
+              )
             ],
           ),
         ),
@@ -157,6 +211,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
     }
   }
 
+  // For the t
   _showTimePicker() {
     return showTimePicker(
         // initialEntryMode: TimePickerEntryMode.input,
@@ -164,5 +219,47 @@ class _AddTaskPageState extends State<AddTaskPage> {
         initialTime: TimeOfDay(
             hour: int.parse(_startTime.split(":")[0]),
             minute: int.parse(_startTime.split(":")[1].split(" ")[0])));
+  }
+
+  // For the color Pallet
+  _colorPallete() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "Color",
+          style: titleStyle,
+        ),
+        const SizedBox(height: 8.0),
+        Wrap(
+          children: List<Widget>.generate(3, (int index) {
+            return GestureDetector(
+              onTap: () {
+                _selectedColor = index;
+                setState(() {});
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: CircleAvatar(
+                  backgroundColor: index == 0
+                      ? primaryClr
+                      : index == 1
+                          ? pinkClr
+                          : yellowClr,
+                  radius: 14,
+                  child: _selectedColor == index
+                      ? const Icon(
+                          Icons.done,
+                          color: Colors.white,
+                          size: 16,
+                        )
+                      : Container(),
+                ),
+              ),
+            );
+          }),
+        )
+      ],
+    );
   }
 }

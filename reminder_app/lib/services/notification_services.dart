@@ -18,6 +18,7 @@ class NotifyHelper {
     final AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings("appicon");
 
+    // Initializing the devices
     final InitializationSettings initializationSettings =
         InitializationSettings(
             iOS: initializationSettingsIOS,
@@ -47,7 +48,6 @@ class NotifyHelper {
   }
 
   void requestIOSPermissions() {
-    print("Called");
     flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
             IOSFlutterLocalNotificationsPlugin>()
@@ -60,7 +60,6 @@ class NotifyHelper {
 
   void displayNotification(
       {required String title, required String body}) async {
-    print("Displaying notification");
     const AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails('your_channel_id', 'your_channel_name',
             channelDescription: 'your_channel_description',

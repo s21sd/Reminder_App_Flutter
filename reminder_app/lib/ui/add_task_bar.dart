@@ -21,6 +21,8 @@ class _AddTaskPageState extends State<AddTaskPage> {
   String _selectedRepeat = "None";
   List<String> repeatList = ["None", "Daily", "Weekly", "Monthly"];
   int _selectedColor = 0;
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _noteController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,8 +37,15 @@ class _AddTaskPageState extends State<AddTaskPage> {
                 "Add Task",
                 style: headingStyle,
               ),
-              const MyInputField(title: "Title", hint: "Enter your title"),
-              const MyInputField(title: "Note", hint: "Enter your note"),
+              MyInputField(
+                title: "Title",
+                hint: "Enter your title",
+                controller: _titleController,
+              ),
+              MyInputField(
+                  title: "Note",
+                  hint: "Enter your note",
+                  controller: _noteController),
               MyInputField(
                 title: "Date",
                 hint: DateFormat.yMd().format(_selectedDate),
@@ -141,12 +150,13 @@ class _AddTaskPageState extends State<AddTaskPage> {
               const SizedBox(height: 18),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   _colorPallete(),
-                  MyButton(label: "Create Task", onTap: () => null),
+                  MyButton(label: "Create Task", onTap: () => _validateForm()),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 40,
               )
             ],
@@ -156,13 +166,33 @@ class _AddTaskPageState extends State<AddTaskPage> {
     );
   }
 
+  // To validate the form
+  _validateForm() {
+    if (_titleController.text.isNotEmpty && _noteController.text.isNotEmpty) {
+      // Add to the database
+      Get.back();
+    } else if (_titleController.text.isEmpty || _noteController.text.isEmail) {
+      Get.snackbar("Required", "All field are required !",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.white,
+          colorText: pinkClr,
+          icon: const Icon(
+            Icons.warning_amber_rounded,
+            color: Colors.red,
+            size: 30,
+          ));
+    }
+  }
+
   // For the app bar
   _appBar(BuildContext context) {
     return AppBar(
       // elevation: 0,
       backgroundColor: Colors.amber,
       leading: GestureDetector(
-        onTap: () {},
+        onTap: () {
+          Get.back();
+        },
         child: Icon(Icons.arrow_back,
             size: 20, color: Get.isDarkMode ? Colors.white : Colors.black),
       ),

@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:reminder_app/db/db_helper.dart';
 import 'package:reminder_app/models/task.dart';
 import 'package:reminder_app/ui/add_task_bar.dart';
 import 'package:reminder_app/ui/login_page.dart';
@@ -63,12 +65,85 @@ class _HomePageState extends State<HomePage> {
       remind: 20,
       repeat: 'Monthly',
     ),
+    Task(
+      id: 4,
+      title: 'Task 3',
+      note: 'This is the note for Task 3',
+      isCompleted: 0,
+      date: '2024-06-19',
+      startTime: '08:00 AM',
+      endTime: '09:00 AM',
+      color: 2,
+      remind: 20,
+      repeat: 'Monthly',
+    ),
+    Task(
+      id: 5,
+      title: 'Task 3',
+      note: 'This is the note for Task 3',
+      isCompleted: 0,
+      date: '2024-06-19',
+      startTime: '08:00 AM',
+      endTime: '09:00 AM',
+      color: 2,
+      remind: 20,
+      repeat: 'Monthly',
+    ),
+    Task(
+      id: 6,
+      title: 'Task 3',
+      note: 'This is the note for Task 3',
+      isCompleted: 0,
+      date: '2024-06-19',
+      startTime: '08:00 AM',
+      endTime: '09:00 AM',
+      color: 2,
+      remind: 20,
+      repeat: 'Monthly',
+    ),
+    Task(
+      id: 7,
+      title: 'Task 3',
+      note: 'This is the note for Task 3',
+      isCompleted: 0,
+      date: '2024-06-19',
+      startTime: '08:00 AM',
+      endTime: '09:00 AM',
+      color: 2,
+      remind: 20,
+      repeat: 'Monthly',
+    ),
+    Task(
+      id: 8,
+      title: 'Task 3',
+      note: 'This is the note for Task 3',
+      isCompleted: 0,
+      date: '2024-06-19',
+      startTime: '08:00 AM',
+      endTime: '09:00 AM',
+      color: 2,
+      remind: 20,
+      repeat: 'Monthly',
+    ),
+    Task(
+      id: 9,
+      title: 'Task 3',
+      note: 'This is the note for Task 3',
+      isCompleted: 0,
+      date: '2024-06-19',
+      startTime: '08:00 AM',
+      endTime: '09:00 AM',
+      color: 2,
+      remind: 20,
+      repeat: 'Monthly',
+    ),
   ];
   @override
   void initState() {
     super.initState();
     notifyHelper = NotifyHelper();
     notifyHelper.initializeNotification();
+
     // notifyHelper.requestIOSPermissions();
   }
 
@@ -93,32 +168,30 @@ class _HomePageState extends State<HomePage> {
   AppBar _appBar(BuildContext context) {
     return AppBar(
       leading: GestureDetector(
-        onTap: () async {
-          ThemeService().switchTheme();
-          notifyHelper.displayNotification(
-            title: "Theme Changed",
-            body:
-                Get.isDarkMode ? "Activated Dark Mode" : "Activated Light Mode",
-          );
-        },
-        child: Icon(
-          Get.isDarkMode
-              ? Icons.wb_sunny_outlined
-              : Icons.nightlight_round_sharp,
-          size: 20,
-          color: Get.isDarkMode ? Colors.white : Colors.black,
-        ),
-      ),
+          onTap: () async {
+            // ThemeService().switchTheme();
+            // notifyHelper.displayNotification(
+            //   title: "Theme Changed",
+            //   body:
+            //       Get.isDarkMode ? "Activated Dark Mode" : "Activated Light Mode",
+            // );
+          },
+          child: Container(
+            margin: const EdgeInsets.all(8),
+            width: 40,
+            child: widget.imgUrl != null
+                ? CircleAvatar(
+                    minRadius: 20,
+                    maxRadius: 40,
+                    backgroundImage: NetworkImage(widget.imgUrl!),
+                  )
+                : const CircleAvatar(
+                    minRadius: 20,
+                    maxRadius: 40,
+                    backgroundImage: AssetImage('assets/images/user3.jpg'),
+                  ),
+          )),
       actions: [
-        if (widget.imgUrl != null)
-          CircleAvatar(
-            backgroundImage: NetworkImage(widget.imgUrl!),
-          )
-        else
-          const CircleAvatar(
-            backgroundImage: AssetImage('assets/images/user3.jpg'),
-          ),
-        const SizedBox(width: 10),
         GestureDetector(
           onTap: () async {
             await FirebaseServices().signOut();
@@ -206,35 +279,173 @@ class _HomePageState extends State<HomePage> {
   }
 
 // Show The Todos
-  _showTasks() {
+  // _showTasks() {
+  //   return Expanded(
+  //     child: ListView.builder(
+  //       itemCount: dummyTasks.length,
+  //       itemBuilder: (context, index) {
+  //         final task = dummyTasks[index];
+  //         return GestureDetector(
+  //             onTap: () {
+  //               delete;
+  //             },
+  //             child: AnimationConfiguration.staggeredList(
+  //                 position: index,
+  //                 child: SlideAnimation(
+  //                   child: FadeInAnimation(
+  //                     child: Row(
+  //                       children: [
+  //                         GestureDetector(
+  //                           onTap: () {
+  //                             _showBottomSheet(context, task);
+  //                           },
+  //                           child: TaskTile(task),
+  //                         )
+  //                       ],
+  //                     ),
+  //                   ),
+  //                 )));
+  //       },
+  //     ),
+  //   );
+  // }
+
+  Widget _showTasks() {
     return Expanded(
-      child: ListView.builder(
-        itemCount: dummyTasks.length,
-        itemBuilder: (context, index) {
-          final task = dummyTasks[index];
-          return GestureDetector(
-              onTap: () {
-                delete;
-              },
-              child: AnimationConfiguration.staggeredList(
-                  position: index,
-                  child: SlideAnimation(
-                    child: FadeInAnimation(
-                      child: Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () {},
-                            child: TaskTile(task),
-                          )
-                        ],
-                      ),
-                    ),
-                  )));
+      child: StreamBuilder<QuerySnapshot>(
+        stream: DbHelper.readItems(widget.userId!),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+            return const Center(child: Text('No tasks found.'));
+          }
+
+          List<Task> tasks = snapshot.data!.docs.map((doc) {
+            var data = doc.data() as Map<String, dynamic>;
+            return Task(
+              id: data['id'],
+              title: data['title'],
+              note: data['note'],
+              isCompleted: data['isCompleted'],
+              date: data['date'],
+              startTime: data['startTime'],
+              endTime: data['endTime'],
+              color: data['color'],
+              remind: data['remind'],
+              repeat: data['repeat'],
+            );
+          }).toList();
+
+          return ListView.builder(
+            itemCount: tasks.length,
+            itemBuilder: (context, index) {
+              final task = tasks[index];
+              return GestureDetector(
+                  onTap: () {},
+                  child: AnimationConfiguration.staggeredList(
+                      position: index,
+                      child: SlideAnimation(
+                        child: FadeInAnimation(
+                          child: Row(
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  _showBottomSheet(context, task);
+                                },
+                                child: TaskTile(task),
+                              )
+                            ],
+                          ),
+                        ),
+                      )));
+            },
+          );
         },
       ),
     );
   }
 
+  // For the buttom pop bar
+  _showBottomSheet(BuildContext context, Task task) {
+    Get.bottomSheet(Container(
+      color: Colors.white,
+      padding: const EdgeInsets.only(top: 4),
+      height: task.isCompleted == 1
+          ? MediaQuery.of(context).size.height * 0.25
+          : MediaQuery.of(context).size.height * 0.32,
+      child: Column(
+        children: [
+          Container(
+            height: 6,
+            width: 120,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10), color: Colors.grey),
+          ),
+          const Spacer(),
+          task.isCompleted == 1
+              ? Container()
+              : _bottomSheetButton(
+                  label: "Task Completed",
+                  onTap: () {
+                    Get.back();
+                  },
+                  clr: primaryClr,
+                  context: context),
+          _bottomSheetButton(
+              label: "Delete Task",
+              onTap: () {
+                print(task.id);
+                delete(task.id.toString());
+                Get.back();
+              },
+              clr: Colors.red,
+              context: context),
+          const SizedBox(
+            height: 10,
+          ),
+          _bottomSheetButton(
+              label: "Close",
+              onTap: () {
+                Get.back();
+              },
+              isClose: true,
+              clr: Colors.black,
+              context: context),
+        ],
+      ),
+    ));
+  }
+
+  _bottomSheetButton(
+      {required String label,
+      required Function()? onTap,
+      required Color clr,
+      required BuildContext context,
+      bool isClose = false}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+          margin: const EdgeInsets.symmetric(vertical: 4),
+          height: 50,
+          width: MediaQuery.of(context).size.width * 0.9,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              color: isClose == true ? Colors.transparent : clr,
+              border: Border.all(
+                  width: 2, color: isClose == true ? Colors.grey : clr)),
+          child: Center(
+              child: Text(
+            label,
+            style:
+                isClose ? titleStyle : titleStyle.copyWith(color: Colors.white),
+          ))),
+    );
+  }
+
   // for Deleting the todos
-  void delete() {}
+  void delete(String index) {
+    DbHelper.deleteItem(docId: index);
+  }
 }

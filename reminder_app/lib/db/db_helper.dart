@@ -39,9 +39,9 @@ class DbHelper {
   }
 
   // For Reading the data
-  static Stream<QuerySnapshot> readItems() {
+  static Stream<QuerySnapshot> readItems(String userid) {
     CollectionReference todoItemCollection =
-        _mainCollection.doc(userUid).collection('userTodos');
+        _mainCollection.doc(userid).collection('userTodos');
     return todoItemCollection.snapshots();
   }
 
@@ -49,6 +49,7 @@ class DbHelper {
   static Future<void> deleteItem({
     required String docId,
   }) async {
+
     DocumentReference documentReference =
         _mainCollection.doc(userUid).collection("userTodos").doc(docId);
 

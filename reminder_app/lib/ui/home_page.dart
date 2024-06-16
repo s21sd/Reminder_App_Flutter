@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';// Assuming the correct import for AddTaskPage
+import 'package:intl/intl.dart';
+import 'package:reminder_app/models/task.dart';
 import 'package:reminder_app/ui/add_task_bar.dart';
 import 'package:reminder_app/ui/login_page.dart';
 import 'package:reminder_app/ui/theme.dart';
 import 'package:reminder_app/ui/widgets/buttons.dart';
-import 'package:easy_date_timeline/easy_date_timeline.dart';// Assuming the correct import for FirebaseServices
+import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:reminder_app/services/notification_services.dart';
 import 'package:reminder_app/services/theme_services.dart';
 import 'package:reminder_app/ui/widgets/google_auth.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:reminder_app/ui/widgets/task_tile.dart';
 
 class HomePage extends StatefulWidget {
   final String? imgUrl;
   final String? userId;
 
-  const HomePage({Key? key, required this.imgUrl, this.userId})
-      : super(key: key);
+  const HomePage({super.key, required this.imgUrl, this.userId});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -24,7 +26,44 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late NotifyHelper notifyHelper;
-
+  List<Task> dummyTasks = [
+    Task(
+      id: 1,
+      title: 'Task 1',
+      note: 'This is the note for Task 1',
+      isCompleted: 0,
+      date: '2024-06-17',
+      startTime: '10:00 AM',
+      endTime: '11:00 AM',
+      color: 0,
+      remind: 10,
+      repeat: 'Daily',
+    ),
+    Task(
+      id: 2,
+      title: 'Task 2',
+      note: 'This is the note for Task 2',
+      isCompleted: 1,
+      date: '2024-06-18',
+      startTime: '02:30 PM',
+      endTime: '03:30 PM',
+      color: 1,
+      remind: 15,
+      repeat: 'Weekly',
+    ),
+    Task(
+      id: 3,
+      title: 'Task 3',
+      note: 'This is the note for Task 3',
+      isCompleted: 0,
+      date: '2024-06-19',
+      startTime: '08:00 AM',
+      endTime: '09:00 AM',
+      color: 2,
+      remind: 20,
+      repeat: 'Monthly',
+    ),
+  ];
   @override
   void initState() {
     super.initState();
@@ -41,6 +80,10 @@ class _HomePageState extends State<HomePage> {
         children: [
           _addTaskBar(context),
           _addDateBar(),
+          const SizedBox(
+            height: 10,
+          ),
+          _showTasks()
         ],
       ),
     );
@@ -161,4 +204,37 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
+// Show The Todos
+  _showTasks() {
+    return Expanded(
+      child: ListView.builder(
+        itemCount: dummyTasks.length,
+        itemBuilder: (context, index) {
+          final task = dummyTasks[index];
+          return GestureDetector(
+              onTap: () {
+                delete;
+              },
+              child: AnimationConfiguration.staggeredList(
+                  position: index,
+                  child: SlideAnimation(
+                    child: FadeInAnimation(
+                      child: Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () {},
+                            child: TaskTile(task),
+                          )
+                        ],
+                      ),
+                    ),
+                  )));
+        },
+      ),
+    );
+  }
+
+  // for Deleting the todos
+  void delete() {}
 }

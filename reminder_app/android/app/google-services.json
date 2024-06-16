@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "876107566069",
+    "project_id": "foodapp2-3a233",
+    "storage_bucket": "foodapp2-3a233.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:876107566069:android:a6ab3dd7f0bbfc8426eebc",
+        "android_client_info": {
+          "package_name": "com.example.reminder_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "876107566069-qvkomhvg0inlr5vj8obq599rqksahjjd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.reminder_app",
+            "certificate_hash": "906df7abf2b13d5e7412107a61bb90bde6c82e09"
+          }
+        },
+        {
+          "client_id": "876107566069-lpm63tmtpf5sk56eploovjosa32cfo8l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB6GjPE0dQ8-WDHwrPvGkXRmNMUEY-G8wI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "876107566069-3qk6pua2i6oplensa8oqhe4hpo0og0iu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

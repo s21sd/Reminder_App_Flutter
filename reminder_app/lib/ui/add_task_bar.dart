@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:reminder_app/controllers/task_controller.dart';
+import 'package:reminder_app/db/db_helper.dart';
 import 'package:reminder_app/ui/theme.dart';
 import 'package:reminder_app/ui/widgets/input_field.dart';
 import 'package:reminder_app/ui/widgets/buttons.dart';
 
 class AddTaskPage extends StatefulWidget {
-  const AddTaskPage({super.key});
+  final String? userId;
+  const AddTaskPage({super.key, this.userId});
 
   @override
   State<AddTaskPage> createState() => _AddTaskPageState();
 }
 
 class _AddTaskPageState extends State<AddTaskPage> {
+  final TaskController _taskController = Get.put(TaskController());
   DateTime _selectedDate = DateTime.now();
   String _endTime = "9.30 PM";
   String _startTime = DateFormat("hh:mm a").format(DateTime.now()).toString();
@@ -170,6 +174,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
   _validateForm() {
     if (_titleController.text.isNotEmpty && _noteController.text.isNotEmpty) {
       // Add to the database
+      _addTaskToDb();
       Get.back();
     } else if (_titleController.text.isEmpty || _noteController.text.isEmail) {
       Get.snackbar("Required", "All field are required !",
@@ -194,12 +199,9 @@ class _AddTaskPageState extends State<AddTaskPage> {
           Get.back();
         },
         child: Icon(Icons.arrow_back,
-            size: 20, color: Get.isDarkMode ? Colors.white : Colors.black),
+            size: 30, color: Get.isDarkMode ? Colors.white : Colors.black),
       ),
       actions: const [
-        CircleAvatar(
-          backgroundImage: AssetImage('assets/images/user3.jpg'),
-        ),
         SizedBox(
           width: 20,
         )
@@ -241,7 +243,6 @@ class _AddTaskPageState extends State<AddTaskPage> {
     }
   }
 
-  // For the t
   _showTimePicker() {
     return showTimePicker(
         // initialEntryMode: TimePickerEntryMode.input,
@@ -290,6 +291,20 @@ class _AddTaskPageState extends State<AddTaskPage> {
           }),
         )
       ],
+    );
+  }
+
+// Adding the data to database
+  Future<void> _addTaskToDb() async {
+    await DbHelper.addItem(
+      title: _titleController.text,
+      description: _noteController.text,
+      date: DateFormat.yMd().format(_selectedDate),
+      startTime: _startTime,
+      endTime: _endTime,
+      remind: _selectedRemind,
+      repeat: _selectedRepeat,
+      color: _selectedColor,
     );
   }
 }

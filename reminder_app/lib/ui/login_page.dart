@@ -1,8 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
-import 'package:sign_in_button/sign_in_button.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
+import 'package:reminder_app/ui/home_page.dart';
+import 'package:reminder_app/ui/widgets/google_auth.dart';
+import 'package:sign_in_button/sign_in_button.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -77,7 +79,11 @@ class LoginPage extends StatelessWidget {
                             Buttons.google,
                             text: "Sign up with Google",
                             onPressed: () async {
-                              await signInWithGoogle();
+                              UserCredential userCredential =
+                                  await FirebaseServices().signInWithGoogle();
+                              Get.to(() => HomePage(
+                                  imgUrl: userCredential.user?.photoURL,
+                                  userId: userCredential.user!.uid));
                             },
                           ),
                         ),
@@ -89,34 +95,5 @@ class LoginPage extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Future<UserCredential?> signInWithGoogle() async {
-    try {
-      // Trigger the authentication flow
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-      if (googleUser == null) {
-        // The user canceled the sign-in
-        return null;
-      }
-
-      // Obtain the auth details from the request
-      final GoogleSignInAuthentication? googleAuth =
-          await googleUser.authentication;
-
-      // Create a new credential
-      final OAuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth?.accessToken,
-        idToken: googleAuth?.idToken,
-      );
-      print(credential);
-
-      // Once signed in, return the UserCredential
-      return await FirebaseAuth.instance.signInWithCredential(credential);
-    } catch (e) {
-      print(e); // Handle the error
-      return null;
-    }
   }
 }

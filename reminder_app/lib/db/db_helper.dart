@@ -99,4 +99,18 @@ class DbHelper {
         .whenComplete(() => print("Todo item updated in the database"))
         .catchError((e) => print(e));
   }
+
+// For Getting the Todos on a specific date
+
+  static Stream<QuerySnapshot> readItemsForDate(
+      String userUid, String selectedDate) {
+    CollectionReference todoItemCollection = FirebaseFirestore.instance
+        .collection('Todos')
+        .doc(userUid)
+        .collection('userTodos');
+
+    Query query = todoItemCollection.where('date',
+        isEqualTo: selectedDate); // Learn About the firebase query fucntions
+    return query.snapshots();
+  }
 }

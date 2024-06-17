@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
 import 'package:reminder_app/ui/login_page.dart';
 import 'package:reminder_app/ui/widgets/shape_image_positioned.dart';
 
@@ -94,36 +96,50 @@ class _SplashScreenState extends State<MySplashScreen>
     final double screenWidth = MediaQuery.of(context).size.width;
     _initButtonWidth(screenWidth);
     _initPositioned(screenWidth);
+    Size size = MediaQuery.of(context).size;
 
     return CupertinoPageScaffold(
-      backgroundColor: Color.fromARGB(255, 0, 0, 0),
+      backgroundColor: const Color.fromARGB(255, 255, 193, 7),
       child: Stack(
         children: [
-          const ShapeImagePositioned(),
-          const ShapeImagePositioned(top: -100),
-          const ShapeImagePositioned(top: -150),
-          const ShapeImagePositioned(top: -200),
           Container(
             padding: const EdgeInsets.all(20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text(
-                  'Welcome back',
-                  style: TextStyle(
-                      color: CupertinoColors.white,
-                      fontSize: 35,
-                      fontWeight: FontWeight.bold),
+                Padding(
+                  padding: const EdgeInsets.only(right: 25.0),
+                  child: SizedBox(
+                      height: 300,
+                      child: Lottie.asset(
+                          'assets/animations/splashanimation.json',
+                          fit: BoxFit.contain,
+                          width: 400,
+                          height: 400,
+                          repeat: true)),
                 ),
                 const SizedBox(
                   height: 20,
                 ),
-                Text(
-                  'We promise you will have the most fuss-free time with us ever',
+                const Text(
+                  'Reminder App',
                   style: TextStyle(
-                      color: CupertinoColors.white.withOpacity(.8),
-                      fontSize: 20,
+                    color: Color.fromARGB(255, 0, 0, 0),
+                    decoration: TextDecoration.none,
+                    fontSize: 35,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  'Streamline your day with ease: Never miss a moment with our intuitive reminder app.',
+                  style: TextStyle(
+                      decoration: TextDecoration.none,
+                      color: const Color.fromARGB(255, 59, 57, 57).withOpacity(.8),
+                      fontSize: 15,
                       height: 1.5),
                 ),
                 const SizedBox(
@@ -145,7 +161,7 @@ class _SplashScreenState extends State<MySplashScreen>
                               height: _buttonWidth,
                               width: _buttonWidthAnimation.value,
                               decoration: BoxDecoration(
-                                color: const Color.fromARGB(255, 255, 193, 7)
+                                color: const Color.fromARGB(255, 0, 0, 0)
                                     .withOpacity(.7),
                                 borderRadius: BorderRadius.circular(50),
                               ),
@@ -164,7 +180,7 @@ class _SplashScreenState extends State<MySplashScreen>
                                     height: _buttonWidth - 20,
                                     width: _buttonWidth - 20,
                                     decoration: const BoxDecoration(
-                                      color: Color.fromARGB(255, 255, 193, 7),
+                                      color: Color.fromARGB(255, 0, 0, 0),
                                       shape: BoxShape.circle,
                                     ),
                                     alignment: Alignment.center,

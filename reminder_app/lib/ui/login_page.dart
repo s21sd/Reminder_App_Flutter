@@ -32,7 +32,7 @@ class LoginPage extends StatelessWidget {
                     borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(20),
                         bottomRight: Radius.circular(20))),
-                child: Lottie.asset('assets/animations/reminder.json',
+                child: Lottie.asset('assets/animations/splashanimation.json',
                     fit: BoxFit.contain, width: 400, height: 400, repeat: true),
               ),
             ),
@@ -48,19 +48,20 @@ class LoginPage extends StatelessWidget {
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 30,
-                            color: Colors.black,
+                            color: Colors.amber,
                             height: 1.2),
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(
                         height: 12,
                       ),
-                      const Text(
+                      Text(
                         "Never miss a moment. Your tasks, our reminders",
                         style: TextStyle(
                             fontWeight: FontWeight.normal,
                             fontSize: 15,
-                            color: Colors.amber,
+                            color: const Color.fromARGB(255, 59, 57, 57)
+                                .withOpacity(.8),
                             height: 1.2),
                         textAlign: TextAlign.center,
                       ),

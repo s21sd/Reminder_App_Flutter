@@ -10,13 +10,9 @@ class ShapeImagePositioned extends StatelessWidget {
       left: 0,
       top: 0,
       child: Container(
-        height: size.height * 0.53,
         width: size.width,
         decoration: const BoxDecoration(
           color: Color.fromARGB(255, 255, 193, 7),
-          borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(20),
-              bottomRight: Radius.circular(20)),
         ),
       ),
     );

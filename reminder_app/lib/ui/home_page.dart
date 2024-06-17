@@ -27,6 +27,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late NotifyHelper notifyHelper;
+  DateTime _selectedDate = DateTime.now();
   @override
   void initState() {
     super.initState();
@@ -47,7 +48,8 @@ class _HomePageState extends State<HomePage> {
           const SizedBox(
             height: 10,
           ),
-          _showTasks()
+          // _showTasks()
+          _showTasksForDate(_selectedDate),
         ],
       ),
     );
@@ -162,13 +164,15 @@ class _HomePageState extends State<HomePage> {
 
   // Date bar picker implementation
   Widget _addDateBar() {
-    DateTime _selectedDate = DateTime.now();
     return Container(
       margin: const EdgeInsets.only(top: 20, left: 15),
       child: EasyDateTimeLine(
         initialDate: DateTime.now(),
         onDateChange: (selectedDate) {
-          _selectedDate = selectedDate;
+          setState(() {
+            _selectedDate = selectedDate;
+            // Get the items based on the date
+          });
         },
         headerProps: const EasyHeaderProps(showHeader: false),
         activeColor: primaryClr,
@@ -194,6 +198,66 @@ class _HomePageState extends State<HomePage> {
           ),
           todayHighlightStyle: TodayHighlightStyle.withBackground,
         ),
+      ),
+    );
+  }
+
+  // Show the todos based on the date
+  Widget _showTasksForDate(DateTime selectedDate) {
+    String formatedDate = DateFormat('M/dd/yyyy').format(selectedDate);
+    // await DbHelper.readItemsForDate(widget.userId!, formatedDate);
+    return Expanded(
+      child: StreamBuilder<QuerySnapshot>(
+        stream: DbHelper.readItemsForDate(widget.userId!, formatedDate),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+            return const Center(child: Text('No tasks found.'));
+          }
+
+          List<Task> tasks = snapshot.data!.docs.map((doc) {
+            var data = doc.data() as Map<String, dynamic>;
+            return Task(
+              id: data['id'],
+              title: data['title'],
+              description: data['description'],
+              isCompleted: data['isCompleted'],
+              date: data['date'],
+              startTime: data['startTime'],
+              endTime: data['endTime'],
+              color: data['color'],
+              remind: data['remind'],
+              repeat: data['repeat'],
+            );
+          }).toList();
+
+          return ListView.builder(
+            itemCount: tasks.length,
+            itemBuilder: (context, index) {
+              final task = tasks[index];
+              return GestureDetector(
+                  onTap: () {},
+                  child: AnimationConfiguration.staggeredList(
+                      position: index,
+                      child: SlideAnimation(
+                        child: FadeInAnimation(
+                          child: Row(
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  _showBottomSheet(context, task);
+                                },
+                                child: TaskTile(task),
+                              )
+                            ],
+                          ),
+                        ),
+                      )));
+            },
+          );
+        },
       ),
     );
   }

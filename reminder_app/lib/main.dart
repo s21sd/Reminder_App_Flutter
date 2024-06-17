@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:reminder_app/services/theme_services.dart';
-import 'package:reminder_app/ui/login_page.dart';
 import 'package:reminder_app/ui/splash_page.dart';
 import 'package:reminder_app/ui/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -17,6 +16,7 @@ Future<void> main() async {
     projectId: 'foodapp2-3a233',
     storageBucket: 'foodapp2-3a233.appspot.com',
   ));
+  
   await GetStorage.init();
   runApp(const MyApp());
 }

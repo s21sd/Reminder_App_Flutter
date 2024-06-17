@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:uuid/uuid.dart';
 
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 final CollectionReference _mainCollection = _firestore.collection('Todos');
+final _firebaseMessaging = FirebaseMessaging.instance;
 
 class DbHelper {
   // For Writing the data
@@ -112,5 +114,20 @@ class DbHelper {
     Query query = todoItemCollection.where('date',
         isEqualTo: selectedDate); // Learn About the firebase query fucntions
     return query.snapshots();
+  }
+
+  // For the Firebase notification
+
+  Future<void> initNotification() async {
+    await _firebaseMessaging.requestPermission();
+    final fcmToken = await _firebaseMessaging.getToken();
+    print('Token ${fcmToken}');
+    FirebaseMessaging.onBackgroundMessage(handleBackGroundMessages);
+  }
+
+  Future<void> handleBackGroundMessages(RemoteMessage message) async {
+    print('Title: ${message.notification?.title}');
+    print('Body: ${message.notification?.body}');
+    print('Payload: ${message.data}');
   }
 }

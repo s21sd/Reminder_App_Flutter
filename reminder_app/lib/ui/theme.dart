@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+
 const Color bluishClr = Color(0xFF4e5ae8);
 const Color yellowClr = Color(0xFFFFB746);
 const Color pinkClr = Color(0xFFff4667);
@@ -55,3 +56,4 @@ TextStyle get subTitleStyle {
       textStyle: (const TextStyle(
           fontSize: 14, fontWeight: FontWeight.w400, color: Colors.grey)));
 }
+   

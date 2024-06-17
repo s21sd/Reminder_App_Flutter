@@ -70,6 +70,8 @@ dependencies:
 
   # for random id
   uuid: ^4.3.0
+  firebase_messaging: ^15.0.1
+  firebase_analytics: ^11.0.1
   
 
 dev_dependencies:

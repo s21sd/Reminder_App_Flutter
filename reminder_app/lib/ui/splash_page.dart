@@ -123,7 +123,7 @@ class _SplashScreenState extends State<MySplashScreen>
                   height: 20,
                 ),
                 const Text(
-                  'Reminder App',
+                  'Remindify App',
                   style: TextStyle(
                     color: Color.fromARGB(255, 0, 0, 0),
                     decoration: TextDecoration.none,
@@ -138,7 +138,8 @@ class _SplashScreenState extends State<MySplashScreen>
                   'Streamline your day with ease: Never miss a moment with our intuitive reminder app.',
                   style: TextStyle(
                       decoration: TextDecoration.none,
-                      color: const Color.fromARGB(255, 59, 57, 57).withOpacity(.8),
+                      color:
+                          const Color.fromARGB(255, 59, 57, 57).withOpacity(.8),
                       fontSize: 15,
                       height: 1.5),
                 ),

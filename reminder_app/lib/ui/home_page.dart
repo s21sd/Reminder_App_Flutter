@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 import 'package:reminder_app/db/db_helper.dart';
 import 'package:reminder_app/models/task.dart';
 import 'package:reminder_app/ui/add_task_bar.dart';
@@ -214,7 +215,20 @@ class _HomePageState extends State<HomePage> {
             return const Center(child: CircularProgressIndicator());
           }
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            return const Center(child: Text('No tasks found.'));
+            return Center(
+                child: Column(
+              children: [
+                SizedBox(height: 30,),
+                SizedBox(
+                    height: 300,
+                    child: Lottie.asset('assets/animations/empty.json',
+                        fit: BoxFit.contain,
+                        width: 400,
+                        height: 400,
+                        repeat: true)),
+                const Text('No tasks found.')
+              ],
+            ));
           }
 
           List<Task> tasks = snapshot.data!.docs.map((doc) {

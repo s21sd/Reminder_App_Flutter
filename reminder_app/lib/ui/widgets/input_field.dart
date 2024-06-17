@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:reminder_app/ui/theme.dart';
 
 class MyInputField extends StatelessWidget {
@@ -38,8 +37,7 @@ class MyInputField extends StatelessWidget {
                     child: TextFormField(
                       readOnly: widget == null ? false : true,
                       autofocus: false,
-                      cursorColor:
-                          Get.isDarkMode ? Colors.grey[100] : Colors.grey[700],
+                      cursorColor: Colors.black,
                       controller: controller,
                       style: subTitleStyle,
                       decoration: InputDecoration(

@@ -297,6 +297,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
 // Adding the data to database
   Future<void> _addTaskToDb() async {
     await DbHelper.addItem(
+      userUid: widget.userId!,
       title: _titleController.text,
       description: _noteController.text,
       date: DateFormat.yMd().format(_selectedDate),

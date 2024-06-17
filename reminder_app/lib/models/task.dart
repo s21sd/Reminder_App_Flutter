@@ -1,7 +1,7 @@
 class Task {
   int? id;
   String? title;
-  String? note;
+  String? description;
   int? isCompleted;
   String? date;
   String? startTime;
@@ -13,7 +13,7 @@ class Task {
   Task(
       {this.id,
       this.title,
-      this.note,
+      this.description,
       this.isCompleted,
       this.date,
       this.startTime,
@@ -25,7 +25,7 @@ class Task {
   Task.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     title = json['title'];
-    note = json['note'];
+    description = json['description'];
     date = json['date'];
     isCompleted = json['isCompleted'];
     startTime = json['startTime'];
@@ -39,7 +39,7 @@ class Task {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['title'] = title;
-    data['note'] = note;
+    data['description'] = description;
     data['date'] = date;
     data['isCompleted'] = isCompleted;
     data['startTime'] = startTime;

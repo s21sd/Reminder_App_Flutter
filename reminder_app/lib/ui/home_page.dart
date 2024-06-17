@@ -28,116 +28,116 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late NotifyHelper notifyHelper;
-  List<Task> dummyTasks = [
-    Task(
-      id: 1,
-      title: 'Task 1',
-      note: 'This is the note for Task 1',
-      isCompleted: 0,
-      date: '2024-06-17',
-      startTime: '10:00 AM',
-      endTime: '11:00 AM',
-      color: 0,
-      remind: 10,
-      repeat: 'Daily',
-    ),
-    Task(
-      id: 2,
-      title: 'Task 2',
-      note: 'This is the note for Task 2',
-      isCompleted: 1,
-      date: '2024-06-18',
-      startTime: '02:30 PM',
-      endTime: '03:30 PM',
-      color: 1,
-      remind: 15,
-      repeat: 'Weekly',
-    ),
-    Task(
-      id: 3,
-      title: 'Task 3',
-      note: 'This is the note for Task 3',
-      isCompleted: 0,
-      date: '2024-06-19',
-      startTime: '08:00 AM',
-      endTime: '09:00 AM',
-      color: 2,
-      remind: 20,
-      repeat: 'Monthly',
-    ),
-    Task(
-      id: 4,
-      title: 'Task 3',
-      note: 'This is the note for Task 3',
-      isCompleted: 0,
-      date: '2024-06-19',
-      startTime: '08:00 AM',
-      endTime: '09:00 AM',
-      color: 2,
-      remind: 20,
-      repeat: 'Monthly',
-    ),
-    Task(
-      id: 5,
-      title: 'Task 3',
-      note: 'This is the note for Task 3',
-      isCompleted: 0,
-      date: '2024-06-19',
-      startTime: '08:00 AM',
-      endTime: '09:00 AM',
-      color: 2,
-      remind: 20,
-      repeat: 'Monthly',
-    ),
-    Task(
-      id: 6,
-      title: 'Task 3',
-      note: 'This is the note for Task 3',
-      isCompleted: 0,
-      date: '2024-06-19',
-      startTime: '08:00 AM',
-      endTime: '09:00 AM',
-      color: 2,
-      remind: 20,
-      repeat: 'Monthly',
-    ),
-    Task(
-      id: 7,
-      title: 'Task 3',
-      note: 'This is the note for Task 3',
-      isCompleted: 0,
-      date: '2024-06-19',
-      startTime: '08:00 AM',
-      endTime: '09:00 AM',
-      color: 2,
-      remind: 20,
-      repeat: 'Monthly',
-    ),
-    Task(
-      id: 8,
-      title: 'Task 3',
-      note: 'This is the note for Task 3',
-      isCompleted: 0,
-      date: '2024-06-19',
-      startTime: '08:00 AM',
-      endTime: '09:00 AM',
-      color: 2,
-      remind: 20,
-      repeat: 'Monthly',
-    ),
-    Task(
-      id: 9,
-      title: 'Task 3',
-      note: 'This is the note for Task 3',
-      isCompleted: 0,
-      date: '2024-06-19',
-      startTime: '08:00 AM',
-      endTime: '09:00 AM',
-      color: 2,
-      remind: 20,
-      repeat: 'Monthly',
-    ),
-  ];
+  // List<Task> dummyTasks = [
+  //   Task(
+  //     id: 1,
+  //     title: 'Task 1',
+  //     note: 'This is the note for Task 1',
+  //     isCompleted: 0,
+  //     date: '2024-06-17',
+  //     startTime: '10:00 AM',
+  //     endTime: '11:00 AM',
+  //     color: 0,
+  //     remind: 10,
+  //     repeat: 'Daily',
+  //   ),
+  //   Task(
+  //     id: 2,
+  //     title: 'Task 2',
+  //     note: 'This is the note for Task 2',
+  //     isCompleted: 1,
+  //     date: '2024-06-18',
+  //     startTime: '02:30 PM',
+  //     endTime: '03:30 PM',
+  //     color: 1,
+  //     remind: 15,
+  //     repeat: 'Weekly',
+  //   ),
+  //   Task(
+  //     id: 3,
+  //     title: 'Task 3',
+  //     note: 'This is the note for Task 3',
+  //     isCompleted: 0,
+  //     date: '2024-06-19',
+  //     startTime: '08:00 AM',
+  //     endTime: '09:00 AM',
+  //     color: 2,
+  //     remind: 20,
+  //     repeat: 'Monthly',
+  //   ),
+  //   Task(
+  //     id: 4,
+  //     title: 'Task 3',
+  //     note: 'This is the note for Task 3',
+  //     isCompleted: 0,
+  //     date: '2024-06-19',
+  //     startTime: '08:00 AM',
+  //     endTime: '09:00 AM',
+  //     color: 2,
+  //     remind: 20,
+  //     repeat: 'Monthly',
+  //   ),
+  //   Task(
+  //     id: 5,
+  //     title: 'Task 3',
+  //     note: 'This is the note for Task 3',
+  //     isCompleted: 0,
+  //     date: '2024-06-19',
+  //     startTime: '08:00 AM',
+  //     endTime: '09:00 AM',
+  //     color: 2,
+  //     remind: 20,
+  //     repeat: 'Monthly',
+  //   ),
+  //   Task(
+  //     id: 6,
+  //     title: 'Task 3',
+  //     note: 'This is the note for Task 3',
+  //     isCompleted: 0,
+  //     date: '2024-06-19',
+  //     startTime: '08:00 AM',
+  //     endTime: '09:00 AM',
+  //     color: 2,
+  //     remind: 20,
+  //     repeat: 'Monthly',
+  //   ),
+  //   Task(
+  //     id: 7,
+  //     title: 'Task 3',
+  //     note: 'This is the note for Task 3',
+  //     isCompleted: 0,
+  //     date: '2024-06-19',
+  //     startTime: '08:00 AM',
+  //     endTime: '09:00 AM',
+  //     color: 2,
+  //     remind: 20,
+  //     repeat: 'Monthly',
+  //   ),
+  //   Task(
+  //     id: 8,
+  //     title: 'Task 3',
+  //     note: 'This is the note for Task 3',
+  //     isCompleted: 0,
+  //     date: '2024-06-19',
+  //     startTime: '08:00 AM',
+  //     endTime: '09:00 AM',
+  //     color: 2,
+  //     remind: 20,
+  //     repeat: 'Monthly',
+  //   ),
+  //   Task(
+  //     id: 9,
+  //     title: 'Task 3',
+  //     note: 'This is the note for Task 3',
+  //     isCompleted: 0,
+  //     date: '2024-06-19',
+  //     startTime: '08:00 AM',
+  //     endTime: '09:00 AM',
+  //     color: 2,
+  //     remind: 20,
+  //     repeat: 'Monthly',
+  //   ),
+  // ];
   @override
   void initState() {
     super.initState();
@@ -279,36 +279,6 @@ class _HomePageState extends State<HomePage> {
   }
 
 // Show The Todos
-  // _showTasks() {
-  //   return Expanded(
-  //     child: ListView.builder(
-  //       itemCount: dummyTasks.length,
-  //       itemBuilder: (context, index) {
-  //         final task = dummyTasks[index];
-  //         return GestureDetector(
-  //             onTap: () {
-  //               delete;
-  //             },
-  //             child: AnimationConfiguration.staggeredList(
-  //                 position: index,
-  //                 child: SlideAnimation(
-  //                   child: FadeInAnimation(
-  //                     child: Row(
-  //                       children: [
-  //                         GestureDetector(
-  //                           onTap: () {
-  //                             _showBottomSheet(context, task);
-  //                           },
-  //                           child: TaskTile(task),
-  //                         )
-  //                       ],
-  //                     ),
-  //                   ),
-  //                 )));
-  //       },
-  //     ),
-  //   );
-  // }
 
   Widget _showTasks() {
     return Expanded(
@@ -327,7 +297,7 @@ class _HomePageState extends State<HomePage> {
             return Task(
               id: data['id'],
               title: data['title'],
-              note: data['note'],
+              description: data['description'],
               isCompleted: data['isCompleted'],
               date: data['date'],
               startTime: data['startTime'],
@@ -395,10 +365,13 @@ class _HomePageState extends State<HomePage> {
                   context: context),
           _bottomSheetButton(
               label: "Delete Task",
-              onTap: () {
+              onTap: () async {
                 print(task.id);
-                delete(task.id.toString());
-                Get.back();
+                await DbHelper.deleteItem(
+                  userUid: widget.userId!,
+                  docId: task.id.toString(),
+                );
+                // Get.back();
               },
               clr: Colors.red,
               context: context),
@@ -442,10 +415,5 @@ class _HomePageState extends State<HomePage> {
                 isClose ? titleStyle : titleStyle.copyWith(color: Colors.white),
           ))),
     );
-  }
-
-  // for Deleting the todos
-  void delete(String index) {
-    DbHelper.deleteItem(docId: index);
   }
 }

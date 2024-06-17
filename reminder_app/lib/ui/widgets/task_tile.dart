@@ -5,7 +5,7 @@ import 'package:reminder_app/ui/theme.dart';
 
 class TaskTile extends StatelessWidget {
   final Task? task;
-  const TaskTile(this.task);
+  const TaskTile(this.task, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +57,7 @@ class TaskTile extends StatelessWidget {
                 ),
                 const SizedBox(height: 12),
                 Text(
-                  task?.note ?? "",
+                  task?.description ?? "",
                   style: GoogleFonts.lato(
                     textStyle: TextStyle(fontSize: 15, color: Colors.grey[100]),
                   ),

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:uuid/uuid.dart';
 
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 final CollectionReference _mainCollection = _firestore.collection('Todos');
@@ -16,10 +17,16 @@ class DbHelper {
     required String repeat,
     required int color,
   }) async {
-    DocumentReference documentReferencer =
-        _mainCollection.doc(userUid).collection('userTodos').doc();
+    var uuid = Uuid();
+    var random_id = uuid.v4();
+    DocumentReference documentReferencer = _mainCollection
+        .doc(userUid)
+        .collection('userTodos')
+        .doc(
+            random_id); // This line is so imp we have to add the actual id so that We can Use it for later
 
     Map<String, dynamic> data = <String, dynamic>{
+      "id": random_id,
       "title": title,
       "description": description,
       "date": date,

@@ -11,7 +11,6 @@ import 'package:reminder_app/ui/theme.dart';
 import 'package:reminder_app/ui/widgets/buttons.dart';
 import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:reminder_app/services/notification_services.dart';
-import 'package:reminder_app/services/theme_services.dart';
 import 'package:reminder_app/ui/widgets/google_auth.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:reminder_app/ui/widgets/task_tile.dart';
@@ -28,116 +27,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late NotifyHelper notifyHelper;
-  // List<Task> dummyTasks = [
-  //   Task(
-  //     id: 1,
-  //     title: 'Task 1',
-  //     note: 'This is the note for Task 1',
-  //     isCompleted: 0,
-  //     date: '2024-06-17',
-  //     startTime: '10:00 AM',
-  //     endTime: '11:00 AM',
-  //     color: 0,
-  //     remind: 10,
-  //     repeat: 'Daily',
-  //   ),
-  //   Task(
-  //     id: 2,
-  //     title: 'Task 2',
-  //     note: 'This is the note for Task 2',
-  //     isCompleted: 1,
-  //     date: '2024-06-18',
-  //     startTime: '02:30 PM',
-  //     endTime: '03:30 PM',
-  //     color: 1,
-  //     remind: 15,
-  //     repeat: 'Weekly',
-  //   ),
-  //   Task(
-  //     id: 3,
-  //     title: 'Task 3',
-  //     note: 'This is the note for Task 3',
-  //     isCompleted: 0,
-  //     date: '2024-06-19',
-  //     startTime: '08:00 AM',
-  //     endTime: '09:00 AM',
-  //     color: 2,
-  //     remind: 20,
-  //     repeat: 'Monthly',
-  //   ),
-  //   Task(
-  //     id: 4,
-  //     title: 'Task 3',
-  //     note: 'This is the note for Task 3',
-  //     isCompleted: 0,
-  //     date: '2024-06-19',
-  //     startTime: '08:00 AM',
-  //     endTime: '09:00 AM',
-  //     color: 2,
-  //     remind: 20,
-  //     repeat: 'Monthly',
-  //   ),
-  //   Task(
-  //     id: 5,
-  //     title: 'Task 3',
-  //     note: 'This is the note for Task 3',
-  //     isCompleted: 0,
-  //     date: '2024-06-19',
-  //     startTime: '08:00 AM',
-  //     endTime: '09:00 AM',
-  //     color: 2,
-  //     remind: 20,
-  //     repeat: 'Monthly',
-  //   ),
-  //   Task(
-  //     id: 6,
-  //     title: 'Task 3',
-  //     note: 'This is the note for Task 3',
-  //     isCompleted: 0,
-  //     date: '2024-06-19',
-  //     startTime: '08:00 AM',
-  //     endTime: '09:00 AM',
-  //     color: 2,
-  //     remind: 20,
-  //     repeat: 'Monthly',
-  //   ),
-  //   Task(
-  //     id: 7,
-  //     title: 'Task 3',
-  //     note: 'This is the note for Task 3',
-  //     isCompleted: 0,
-  //     date: '2024-06-19',
-  //     startTime: '08:00 AM',
-  //     endTime: '09:00 AM',
-  //     color: 2,
-  //     remind: 20,
-  //     repeat: 'Monthly',
-  //   ),
-  //   Task(
-  //     id: 8,
-  //     title: 'Task 3',
-  //     note: 'This is the note for Task 3',
-  //     isCompleted: 0,
-  //     date: '2024-06-19',
-  //     startTime: '08:00 AM',
-  //     endTime: '09:00 AM',
-  //     color: 2,
-  //     remind: 20,
-  //     repeat: 'Monthly',
-  //   ),
-  //   Task(
-  //     id: 9,
-  //     title: 'Task 3',
-  //     note: 'This is the note for Task 3',
-  //     isCompleted: 0,
-  //     date: '2024-06-19',
-  //     startTime: '08:00 AM',
-  //     endTime: '09:00 AM',
-  //     color: 2,
-  //     remind: 20,
-  //     repeat: 'Monthly',
-  //   ),
-  // ];
   @override
   void initState() {
     super.initState();
@@ -194,8 +83,11 @@ class _HomePageState extends State<HomePage> {
       actions: [
         GestureDetector(
           onTap: () async {
-            await FirebaseServices().signOut();
-            Get.offAll(const LoginPage());
+            bool logoutConfirmed = await _showLogoutConfirmationDialog();
+            if (logoutConfirmed) {
+              await FirebaseServices().signOut();
+              Get.offAll(const LoginPage());
+            }
           },
           child: const Icon(
             Icons.logout,
@@ -206,6 +98,34 @@ class _HomePageState extends State<HomePage> {
         const SizedBox(width: 20),
       ],
     );
+  }
+
+  // For the pop of log out
+  Future<bool> _showLogoutConfirmationDialog() async {
+    bool logoutConfirmed = false;
+    await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Confirm Logout"),
+        content: const Text("Are you sure you want to logout?"),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text("Cancel"),
+          ),
+          TextButton(
+            onPressed: () {
+              logoutConfirmed = true;
+              Navigator.of(context).pop();
+            },
+            child: const Text("OK"),
+          ),
+        ],
+      ),
+    );
+    return logoutConfirmed;
   }
 
   // Task bar implementation
@@ -358,7 +278,8 @@ class _HomePageState extends State<HomePage> {
               ? Container()
               : _bottomSheetButton(
                   label: "Task Completed",
-                  onTap: () {
+                  onTap: () async {
+                    await _updateTaskToDb(task);
                     Get.back();
                   },
                   clr: primaryClr,
@@ -366,12 +287,11 @@ class _HomePageState extends State<HomePage> {
           _bottomSheetButton(
               label: "Delete Task",
               onTap: () async {
-                print(task.id);
                 await DbHelper.deleteItem(
                   userUid: widget.userId!,
                   docId: task.id.toString(),
                 );
-                // Get.back();
+                Get.back();
               },
               clr: Colors.red,
               context: context),
@@ -414,6 +334,23 @@ class _HomePageState extends State<HomePage> {
             style:
                 isClose ? titleStyle : titleStyle.copyWith(color: Colors.white),
           ))),
+    );
+  }
+
+  // for updating the todo
+  Future<void> _updateTaskToDb(Task task) async {
+    await DbHelper.updateItem(
+      userUid: widget.userId!,
+      docId: task.id!,
+      title: task.title!,
+      description: task.description!,
+      date: task.date!,
+      startTime: task.startTime!,
+      endTime: task.endTime!,
+      remind: task.remind!,
+      repeat: task.repeat!,
+      color: task.color!,
+      isCompleted: 1,
     );
   }
 }

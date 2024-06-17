@@ -67,6 +67,9 @@ dependencies:
 
   # for the custom animation
   flutter_staggered_animations: ^1.1.1
+
+  # for random id
+  uuid: ^4.3.0
   
 
 dev_dependencies:

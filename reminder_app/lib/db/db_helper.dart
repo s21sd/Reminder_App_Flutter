@@ -1,10 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:uuid/uuid.dart';
 
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 final CollectionReference _mainCollection = _firestore.collection('Todos');
 final _firebaseMessaging = FirebaseMessaging.instance;
+final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
 
 class DbHelper {
   // For Writing the data
@@ -118,16 +124,54 @@ class DbHelper {
 
   // For the Firebase notification
 
-  Future<void> initNotification() async {
-    await _firebaseMessaging.requestPermission();
+  static Future initNotification() async {
+    await _firebaseMessaging.requestPermission(
+      alert: true,
+      announcement: true,
+      badge: true,
+      carPlay: true,
+      criticalAlert: true,
+      provisional: false,
+      sound: true,
+    );
     final fcmToken = await _firebaseMessaging.getToken();
     print('Token ${fcmToken}');
-    FirebaseMessaging.onBackgroundMessage(handleBackGroundMessages);
   }
 
-  Future<void> handleBackGroundMessages(RemoteMessage message) async {
-    print('Title: ${message.notification?.title}');
-    print('Body: ${message.notification?.body}');
-    print('Payload: ${message.data}');
+  static Future localNotiInit() async {
+    const AndroidInitializationSettings androidInitializationSettings =
+        AndroidInitializationSettings('appicon');
+
+    final InitializationSettings initializationSettings =
+        InitializationSettings(android: androidInitializationSettings);
+
+    _flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()!
+        .requestNotificationsPermission();
+
+    await _flutterLocalNotificationsPlugin.initialize(initializationSettings,
+        onDidReceiveNotificationResponse: onDidReceiveNotificationResponse,
+        onDidReceiveBackgroundNotificationResponse:
+            onDidReceiveNotificationResponse);
+  }
+
+  // Future<void> handleBackGroundMessages(RemoteMessage message) async {
+  //   print('Title: ${message.notification?.title}');
+  //   print('Body: ${message.notification?.body}');
+  //   print('Payload: ${message.data}');
+  // }
+
+  static Future onDidReceiveNotificationResponse(
+      NotificationResponse notificationResponse) async {
+    final String? payload = notificationResponse.payload;
+    if (notificationResponse.payload != null) {
+      print('notification payload: $payload');
+    } else {
+      print("Notification Done");
+    }
+    Get.to(() => Container(
+          color: Colors.blue,
+        ));
   }
 }

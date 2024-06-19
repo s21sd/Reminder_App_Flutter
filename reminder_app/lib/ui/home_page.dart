@@ -30,12 +30,13 @@ class _HomePageState extends State<HomePage> {
   late NotifyHelper notifyHelper;
   DateTime _selectedDate = DateTime.now();
   @override
-  void initState() {
+  void initState()  {
     super.initState();
     notifyHelper = NotifyHelper();
     notifyHelper.initializeNotification();
-
-    // notifyHelper.requestIOSPermissions();
+    notifyHelper.requestIOSPermissions();
+    //  notifyHelper.fetchDataAndNotify(
+    //     userUid: widget.userId!, docId: '3b242d80-c9f9-42c7-8ee0-293235de7b92');
   }
 
   @override
@@ -64,8 +65,9 @@ class _HomePageState extends State<HomePage> {
             // ThemeService().switchTheme();
             // notifyHelper.displayNotification(
             //   title: "Theme Changed",
-            //   body:
-            //       Get.isDarkMode ? "Activated Dark Mode" : "Activated Light Mode",
+            //   body: Get.isDarkMode
+            //       ? "Activated Dark Mode"
+            //       : "Activated Light Mode",
             // );
           },
           child: Container(
@@ -218,7 +220,9 @@ class _HomePageState extends State<HomePage> {
             return Center(
                 child: Column(
               children: [
-                SizedBox(height: 30,),
+                const SizedBox(
+                  height: 30,
+                ),
                 SizedBox(
                     height: 300,
                     child: Lottie.asset('assets/animations/empty.json',
@@ -358,6 +362,9 @@ class _HomePageState extends State<HomePage> {
                   label: "Task Completed",
                   onTap: () async {
                     await _updateTaskToDb(task);
+                    // await DbHelper().notificationData(
+                    //     userUid: widget.userId!,
+                    //     docId: '3b242d80-c9f9-42c7-8ee0-293235de7b92');
                     Get.back();
                   },
                   clr: primaryClr,

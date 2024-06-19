@@ -17,9 +17,6 @@ Future<void> main() async {
     projectId: 'foodapp2-3a233',
     storageBucket: 'foodapp2-3a233.appspot.com',
   ));
-  await DbHelper.initNotification();
-  await DbHelper.localNotiInit();
-
   await GetStorage.init();
   runApp(const MyApp());
 }

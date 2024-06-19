@@ -122,56 +122,29 @@ class DbHelper {
     return query.snapshots();
   }
 
-  // For the Firebase notification
-
-  static Future initNotification() async {
-    await _firebaseMessaging.requestPermission(
-      alert: true,
-      announcement: true,
-      badge: true,
-      carPlay: true,
-      criticalAlert: true,
-      provisional: false,
-      sound: true,
-    );
-    final fcmToken = await _firebaseMessaging.getToken();
-    print('Token ${fcmToken}');
-  }
-
-  static Future localNotiInit() async {
-    const AndroidInitializationSettings androidInitializationSettings =
-        AndroidInitializationSettings('appicon');
-
-    final InitializationSettings initializationSettings =
-        InitializationSettings(android: androidInitializationSettings);
-
-    _flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>()!
-        .requestNotificationsPermission();
-
-    await _flutterLocalNotificationsPlugin.initialize(initializationSettings,
-        onDidReceiveNotificationResponse: onDidReceiveNotificationResponse,
-        onDidReceiveBackgroundNotificationResponse:
-            onDidReceiveNotificationResponse);
-  }
-
-  // Future<void> handleBackGroundMessages(RemoteMessage message) async {
-  //   print('Title: ${message.notification?.title}');
-  //   print('Body: ${message.notification?.body}');
-  //   print('Payload: ${message.data}');
-  // }
-
-  static Future onDidReceiveNotificationResponse(
-      NotificationResponse notificationResponse) async {
-    final String? payload = notificationResponse.payload;
-    if (notificationResponse.payload != null) {
-      print('notification payload: $payload');
-    } else {
-      print("Notification Done");
+  
+  // fetching the data for the notification from the firebase
+  static Future<Map<String, String>> notificationData({
+    required String userUid,
+    required String docId,
+  }) async {
+    DocumentReference documentReference =
+        _mainCollection.doc(userUid).collection("userTodos").doc(docId);
+    try {
+      DocumentSnapshot documentSnapshot = await documentReference.get();
+      if (documentSnapshot.exists) {
+        Map<String, dynamic> data =
+            documentSnapshot.data() as Map<String, dynamic>;
+        String title = data['title'] ?? 'No Title';
+        String description = data['description'] ?? 'No description';
+        return {'title': title, 'description': description};
+      } else {
+        print('No such doc');
+        return {'title': 'No Title', 'description': 'No description'};
+      }
+    } catch (e) {
+      print('Error fetching document: $e');
+      return {'title': 'Error', 'description': 'Error'};
     }
-    Get.to(() => Container(
-          color: Colors.blue,
-        ));
   }
 }

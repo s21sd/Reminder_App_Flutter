@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
+import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 final CollectionReference _mainCollection = _firestore.collection('Todos');
@@ -9,6 +11,11 @@ final CollectionReference _mainCollection = _firestore.collection('Todos');
 class NotifyHelper {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
+
+  NotifyHelper() {
+    tz.initializeTimeZones();
+    initializeNotification();
+  }
 
   initializeNotification() async {
     // For iOS Notifications
@@ -18,6 +25,7 @@ class NotifyHelper {
             requestBadgePermission: false,
             requestAlertPermission: false,
             onDidReceiveLocalNotification: onDidReceiveLocalNotification);
+
     // For Android Notifications
     final AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings("appicon");
@@ -35,7 +43,7 @@ class NotifyHelper {
   Future onDidReceiveLocalNotification(
       int id, String? title, String? body, String? payload) async {
     // Display a dialog with the notification details, tap ok to go to another page
-    Get.dialog(Text("Welcome to Flutter"));
+    Get.dialog(const Text("Welcome to Flutter"));
   }
 
   void onDidReceiveNotificationResponse(
@@ -68,7 +76,6 @@ class NotifyHelper {
   }) async {
     Map<String, String> data =
         await notificationData(userUid: userUid, docId: docId);
-    
     displayNotification(title: data['title']!, body: data['description']!);
   }
 
@@ -80,11 +87,42 @@ class NotifyHelper {
             importance: Importance.max,
             priority: Priority.high,
             ticker: 'ticker',
-            icon: 'appicon'); // Explicitly set the icon here
+            icon: 'appicon');
     const NotificationDetails notificationDetails =
         NotificationDetails(android: androidNotificationDetails);
     await flutterLocalNotificationsPlugin
         .show(0, title, body, notificationDetails, payload: 'item x');
+  }
+
+  Future<void> scheduleNotification({
+    required String userUid,
+    required String docId,
+    required DateTime scheduledTime,
+  }) async {
+    print(tz.local);
+    Map<String, String> data =
+        await notificationData(userUid: userUid, docId: docId);
+
+    await flutterLocalNotificationsPlugin.zonedSchedule(
+      0,
+      data['title'],
+      data['description'],
+      tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5)),
+      const NotificationDetails(
+        android: AndroidNotificationDetails(
+          'your_channel_id',
+          'your_channel_name',
+          channelDescription: 'your_channel_description',
+          importance: Importance.max,
+          priority: Priority.high,
+          icon: 'appicon',
+        ),
+      ),
+      androidAllowWhileIdle: true,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
+      matchDateTimeComponents: DateTimeComponents.time,
+    );
   }
 
   static Future<Map<String, String>> notificationData({
@@ -109,5 +147,27 @@ class NotifyHelper {
       print('Error fetching document: $e');
       return {'title': 'Error', 'description': 'Error'};
     }
+  }
+
+  scheduledNotification2(String title, String body) async {
+    var notifictionDetails = NotificationDetails();
+    await flutterLocalNotificationsPlugin.zonedSchedule(
+        0,
+        title,
+        body,
+        tz.TZDateTime.now(tz.local).add(Duration(seconds: 10)),
+        const NotificationDetails(
+          android: AndroidNotificationDetails(
+            'your_channel_id',
+            'your_channel_name',
+            channelDescription: 'your_channel_description',
+            importance: Importance.max,
+            priority: Priority.high,
+            icon: 'appicon',
+          ),
+        ),
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
+        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle);
   }
 }

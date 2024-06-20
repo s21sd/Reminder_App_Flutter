@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:reminder_app/ui/login_page.dart';
-import 'package:reminder_app/ui/widgets/shape_image_positioned.dart';
 
 class MySplashScreen extends StatefulWidget {
   const MySplashScreen({super.key});

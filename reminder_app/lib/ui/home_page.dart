@@ -30,13 +30,11 @@ class _HomePageState extends State<HomePage> {
   late NotifyHelper notifyHelper;
   DateTime _selectedDate = DateTime.now();
   @override
-  void initState()  {
+  void initState() {
     super.initState();
     notifyHelper = NotifyHelper();
     notifyHelper.initializeNotification();
     notifyHelper.requestIOSPermissions();
-    //  notifyHelper.fetchDataAndNotify(
-    //     userUid: widget.userId!, docId: '3b242d80-c9f9-42c7-8ee0-293235de7b92');
   }
 
   @override
@@ -69,6 +67,13 @@ class _HomePageState extends State<HomePage> {
             //       ? "Activated Dark Mode"
             //       : "Activated Light Mode",
             // );
+            // notifyHelper.scheduleNotification(
+            //   userUid: widget.userId!,
+            //   docId: '3b242d80-c9f9-42c7-8ee0-293235de7b92',
+            //   scheduledTime: DateTime.now().add(Duration(seconds: 10)),
+            // );
+            NotifyHelper().scheduledNotification2(
+                'this is first', "This is my first notification");
           },
           child: Container(
             margin: const EdgeInsets.all(8),

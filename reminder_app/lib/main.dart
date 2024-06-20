@@ -18,8 +18,10 @@ Future<void> main() async {
     projectId: 'foodapp2-3a233',
     storageBucket: 'foodapp2-3a233.appspot.com',
   ));
-  NotifyHelper()
-      .scheduledNotification2('this is first', "This is my first notification");
+  NotifyHelper().scheduledNotification2(
+      title: 'this is first',
+      body: "This is my first notification",
+      scheduledTime: DateTime.now().add(Duration(minutes: 1)));
   await GetStorage.init();
   runApp(const MyApp());
 }

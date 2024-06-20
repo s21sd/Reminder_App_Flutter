@@ -74,7 +74,7 @@ class NotifyHelper {
     required String userUid,
     required String docId,
   }) async {
-    Map<String, String> data =
+    Map<String, dynamic> data =
         await notificationData(userUid: userUid, docId: docId);
     displayNotification(title: data['title']!, body: data['description']!);
   }
@@ -100,7 +100,7 @@ class NotifyHelper {
     required DateTime scheduledTime,
   }) async {
     print(tz.local);
-    Map<String, String> data =
+    Map<String, dynamic> data =
         await notificationData(userUid: userUid, docId: docId);
 
     await flutterLocalNotificationsPlugin.zonedSchedule(
@@ -125,7 +125,7 @@ class NotifyHelper {
     );
   }
 
-  static Future<Map<String, String>> notificationData({
+  static Future<Map<String, dynamic>> notificationData({
     required String userUid,
     required String docId,
   }) async {
@@ -138,24 +138,45 @@ class NotifyHelper {
             documentSnapshot.data() as Map<String, dynamic>;
         String title = data['title'] ?? 'No Title';
         String description = data['description'] ?? 'No description';
-        return {'title': title, 'description': description};
+        String date = data['date'] ?? 'No date';
+        String endTime = data['endTime'] ?? 'No endTime';
+        return {
+          'title': title,
+          'description': description,
+          'date': date,
+          'endTime': endTime
+        };
       } else {
         print('No such doc');
-        return {'title': 'No Title', 'description': 'No description'};
+        return {
+          'title': 'No Title',
+          'description': 'No description',
+          'date': 'No date',
+          'endTime': 'No endTime'
+        };
       }
     } catch (e) {
       print('Error fetching document: $e');
-      return {'title': 'Error', 'description': 'Error'};
+      return {
+        'title': 'Error',
+        'description': 'Error',
+        'date': 'Error',
+        'endTime': 'Error'
+      };
     }
   }
 
-  scheduledNotification2(String title, String body) async {
+  scheduledNotification2({
+    required String title,
+    required String body,
+    required DateTime scheduledTime,
+  }) async {
     var notifictionDetails = NotificationDetails();
     await flutterLocalNotificationsPlugin.zonedSchedule(
         0,
         title,
         body,
-        tz.TZDateTime.now(tz.local).add(Duration(seconds: 10)),
+        tz.TZDateTime.from(scheduledTime, tz.local),
         const NotificationDetails(
           android: AndroidNotificationDetails(
             'your_channel_id',

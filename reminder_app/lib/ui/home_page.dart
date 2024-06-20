@@ -73,7 +73,9 @@ class _HomePageState extends State<HomePage> {
             //   scheduledTime: DateTime.now().add(Duration(seconds: 10)),
             // );
             NotifyHelper().scheduledNotification2(
-                'this is first', "This is my first notification");
+                title: 'this is first',
+                body: "This is my first notification",
+                scheduledTime: DateTime.now().add(Duration(minutes: 1)));
           },
           child: Container(
             margin: const EdgeInsets.all(8),

@@ -1,9 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:reminder_app/services/notification_services.dart';
 import 'package:uuid/uuid.dart';
 
@@ -23,7 +20,6 @@ class DbHelper {
     required String startTime,
     required String endTime,
     required int remind,
-    required String repeat,
     required int color,
   }) async {
     var uuid = Uuid();
@@ -42,7 +38,6 @@ class DbHelper {
       "startTime": startTime,
       "endTime": endTime,
       "remind": remind,
-      "repeat": repeat,
       "color": color,
       "isCompleted": 0,
     };
@@ -123,7 +118,6 @@ class DbHelper {
     required String startTime,
     required String endTime,
     required int remind,
-    required String repeat,
     required int color,
     required int isCompleted,
   }) async {
@@ -137,7 +131,6 @@ class DbHelper {
       "startTime": startTime,
       "endTime": endTime,
       "remind": remind,
-      "repeat": repeat,
       "color": color,
       "isCompleted": isCompleted,
     };

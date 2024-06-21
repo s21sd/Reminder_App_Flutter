@@ -454,7 +454,6 @@ class _HomePageState extends State<HomePage> {
       startTime: task.startTime!,
       endTime: task.endTime!,
       remind: task.remind!,
-      repeat: task.repeat!,
       color: task.color!,
       isCompleted: 1,
     );

@@ -17,14 +17,11 @@ class AddTaskPage extends StatefulWidget {
 }
 
 class _AddTaskPageState extends State<AddTaskPage> {
-  final TaskController _taskController = Get.put(TaskController());
   DateTime _selectedDate = DateTime.now();
   String _endTime = "9.30 PM";
   String _startTime = DateFormat("hh:mm a").format(DateTime.now()).toString();
   int _selectedRemind = 5;
   List<int> remindList = [5, 10, 15, 20];
-  String _selectedRepeat = "None";
-  List<String> repeatList = ["None", "Daily", "Weekly", "Monthly"];
   int _selectedColor = 0;
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _noteController = TextEditingController();
@@ -125,33 +122,34 @@ class _AddTaskPageState extends State<AddTaskPage> {
                   style: subTitleStyle,
                 ),
               ),
-              MyInputField(
-                title: "Repeat",
-                hint: _selectedRepeat,
-                widget: DropdownButton(
-                  value: _selectedRepeat,
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      _selectedRepeat = newValue!;
-                    });
-                  },
-                  items:
-                      repeatList.map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                        value: value, child: Text(value));
-                  }).toList(),
-                  icon: const Icon(
-                    Icons.keyboard_arrow_down,
-                    color: Colors.grey,
-                  ),
-                  iconSize: 32,
-                  elevation: 4,
-                  underline: Container(
-                    height: 0,
-                  ),
-                  style: subTitleStyle,
-                ),
-              ),
+
+              // MyInputField(
+              //   title: "Repeat",
+              //   hint: _selectedRepeat,
+              //   widget: DropdownButton(
+              //     value: _selectedRepeat,
+              //     onChanged: (String? newValue) {
+              //       setState(() {
+              //         _selectedRepeat = newValue!;
+              //       });
+              //     },
+              //     items:
+              //         repeatList.map<DropdownMenuItem<String>>((String value) {
+              //       return DropdownMenuItem<String>(
+              //           value: value, child: Text(value));
+              //     }).toList(),
+              //     icon: const Icon(
+              //       Icons.keyboard_arrow_down,
+              //       color: Colors.grey,
+              //     ),
+              //     iconSize: 32,
+              //     elevation: 4,
+              //     underline: Container(
+              //       height: 0,
+              //     ),
+              //     style: subTitleStyle,
+              //   ),
+              // ),
               const SizedBox(height: 18),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -318,7 +316,6 @@ class _AddTaskPageState extends State<AddTaskPage> {
       startTime: _startTime,
       endTime: _endTime,
       remind: _selectedRemind,
-      repeat: _selectedRepeat,
       color: _selectedColor,
     );
   }

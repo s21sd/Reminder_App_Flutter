@@ -115,7 +115,6 @@ class NotifyHelper {
     String date = data['date'];
     String endTime = data['endTime'];
     int remind = data['remind'];
-    String repeat = data['repeat'];
 
     var timeComponents = getTimeComponents(endTime);
     int hour = int.parse(timeComponents['hour']!);
@@ -200,14 +199,12 @@ class NotifyHelper {
         String date = data['date'] ?? 'No date';
         String endTime = data['endTime'] ?? 'No endTime';
         int reminder = data['remind'] ?? 5;
-        String repeat = data['repeat'] ?? 'None';
         return {
           'title': title,
           'description': description,
           'date': date,
           'endTime': endTime,
           'reminder': reminder,
-          'repeat': repeat
         };
       } else {
         print('No such doc');
@@ -217,7 +214,6 @@ class NotifyHelper {
           'date': 'No date',
           'endTime': 'No endTime',
           'reminder': 'No',
-          'repeat': 'No'
         };
       }
     } catch (e) {

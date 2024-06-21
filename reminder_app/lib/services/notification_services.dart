@@ -114,6 +114,8 @@ class NotifyHelper {
 
     String date = data['date'];
     String endTime = data['endTime'];
+    int remind = data['remind'];
+    String repeat = data['repeat'];
 
     var timeComponents = getTimeComponents(endTime);
     int hour = int.parse(timeComponents['hour']!);
@@ -125,6 +127,12 @@ class NotifyHelper {
     } else if (period == 'AM' && hour == 12) {
       hour = 0;
     }
+    int newmin = 0;
+    if (minute >= 5) {
+      newmin = (minute - remind).abs();
+    } else {
+      newmin = minute;
+    }
 
     DateTime now = DateTime.now();
     DateTime selectedDate = DateFormat.yMd().parse(date);
@@ -133,7 +141,7 @@ class NotifyHelper {
       selectedDate.month,
       selectedDate.day,
       hour,
-      minute,
+      newmin,
     );
     print(selectedTime);
 

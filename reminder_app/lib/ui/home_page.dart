@@ -72,10 +72,13 @@ class _HomePageState extends State<HomePage> {
             //   docId: '3b242d80-c9f9-42c7-8ee0-293235de7b92',
             //   scheduledTime: DateTime.now().add(Duration(seconds: 10)),
             // );
-            NotifyHelper().scheduledNotification2(
-                title: 'this is first',
-                body: "This is my first notification",
-                scheduledTime: DateTime.now().add(Duration(minutes: 1)));
+            NotifyHelper().scheduleNotificationBasedOnData(
+                userUid: widget.userId!,
+                docId: "aa722709-655f-47d5-9698-0941e3cc430d");
+            // NotifyHelper().scheduledNotification2(
+            //     title: 'this is first',
+            //     body: "This is my first notification from chanel 2",
+            //     scheduledTime: DateTime.now().add(Duration(minutes: 1)));
           },
           child: Container(
             margin: const EdgeInsets.all(8),

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
@@ -42,7 +43,6 @@ class NotifyHelper {
 
   Future onDidReceiveLocalNotification(
       int id, String? title, String? body, String? payload) async {
-    // Display a dialog with the notification details, tap ok to go to another page
     Get.dialog(const Text("Welcome to Flutter"));
   }
 
@@ -94,20 +94,42 @@ class NotifyHelper {
         .show(0, title, body, notificationDetails, payload: 'item x');
   }
 
-  Future<void> scheduleNotification({
+  Future<void> scheduleNotificationBasedOnData({
     required String userUid,
     required String docId,
-    required DateTime scheduledTime,
   }) async {
-    print(tz.local);
     Map<String, dynamic> data =
         await notificationData(userUid: userUid, docId: docId);
 
+    String date = data['date'];
+    String endTime = data['endTime'];
+    int remind = data['remind'];
+    String repeat = data['repeat'];
+    print(date);
+    print(endTime);
+    print(remind);
+    print(repeat);
+
+    DateTime selectedTime = DateTime.now().add(Duration(seconds: 10));
+
+    // Schedule the notification
+    await scheduledNotification2(
+      title: data['title'],
+      body: data['description'],
+      scheduledTime: selectedTime,
+    );
+  }
+
+  Future<void> scheduledNotification2({
+    required String title,
+    required String body,
+    required DateTime scheduledTime,
+  }) async {
     await flutterLocalNotificationsPlugin.zonedSchedule(
       0,
-      data['title'],
-      data['description'],
-      tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5)),
+      title,
+      body,
+      tz.TZDateTime.from(scheduledTime, tz.local),
       const NotificationDetails(
         android: AndroidNotificationDetails(
           'your_channel_id',
@@ -118,10 +140,9 @@ class NotifyHelper {
           icon: 'appicon',
         ),
       ),
-      androidAllowWhileIdle: true,
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
-      matchDateTimeComponents: DateTimeComponents.time,
+      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
     );
   }
 
@@ -140,11 +161,15 @@ class NotifyHelper {
         String description = data['description'] ?? 'No description';
         String date = data['date'] ?? 'No date';
         String endTime = data['endTime'] ?? 'No endTime';
+        int remind = data['remind'] ?? 5;
+        String repeat = data['repeat'] ?? 'None';
         return {
           'title': title,
           'description': description,
           'date': date,
-          'endTime': endTime
+          'endTime': endTime,
+          'remind': remind,
+          'repeat': repeat,
         };
       } else {
         print('No such doc');
@@ -152,7 +177,9 @@ class NotifyHelper {
           'title': 'No Title',
           'description': 'No description',
           'date': 'No date',
-          'endTime': 'No endTime'
+          'endTime': 'No endTime',
+          'remind': 5,
+          'repeat': 'None'
         };
       }
     } catch (e) {
@@ -161,34 +188,10 @@ class NotifyHelper {
         'title': 'Error',
         'description': 'Error',
         'date': 'Error',
-        'endTime': 'Error'
+        'endTime': 'Error',
+        'remind': 5,
+        'repeat': 'None'
       };
     }
-  }
-
-  scheduledNotification2({
-    required String title,
-    required String body,
-    required DateTime scheduledTime,
-  }) async {
-    var notifictionDetails = NotificationDetails();
-    await flutterLocalNotificationsPlugin.zonedSchedule(
-        0,
-        title,
-        body,
-        tz.TZDateTime.from(scheduledTime, tz.local),
-        const NotificationDetails(
-          android: AndroidNotificationDetails(
-            'your_channel_id',
-            'your_channel_name',
-            channelDescription: 'your_channel_description',
-            importance: Importance.max,
-            priority: Priority.high,
-            icon: 'appicon',
-          ),
-        ),
-        uiLocalNotificationDateInterpretation:
-            UILocalNotificationDateInterpretation.absoluteTime,
-        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle);
   }
 }

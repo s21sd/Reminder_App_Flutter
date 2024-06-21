@@ -60,27 +60,7 @@ class _HomePageState extends State<HomePage> {
   AppBar _appBar(BuildContext context) {
     return AppBar(
       leading: GestureDetector(
-          onTap: () async {
-            // ThemeService().switchTheme();
-            // notifyHelper.displayNotification(
-            //   title: "Theme Changed",
-            //   body: Get.isDarkMode
-            //       ? "Activated Dark Mode"
-            //       : "Activated Light Mode",
-            // );
-            // notifyHelper.scheduleNotification(
-            //   userUid: widget.userId!,
-            //   docId: '3b242d80-c9f9-42c7-8ee0-293235de7b92',
-            //   scheduledTime: DateTime.now().add(Duration(seconds: 10)),
-            // );
-
-            // await DbHelper()
-            //     .scheduleAllTasksNotifications('wnMkvUGdEwSnNRyMc3AS0jjez2z1');
-            // NotifyHelper().scheduledNotification2(
-            //     title: 'this is first',
-            //     body: "This is my first notification from chanel 2",
-            //     scheduledTime: DateTime.now().add(Duration(minutes: 1)));
-          },
+          onTap: () async {},
           child: Container(
             margin: const EdgeInsets.all(8),
             width: 40,

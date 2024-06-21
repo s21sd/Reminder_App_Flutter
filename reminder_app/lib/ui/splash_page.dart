@@ -94,7 +94,6 @@ class _SplashScreenState extends State<MySplashScreen>
     final double screenWidth = MediaQuery.of(context).size.width;
     _initButtonWidth(screenWidth);
     _initPositioned(screenWidth);
-    Size size = MediaQuery.of(context).size;
 
     return CupertinoPageScaffold(
       backgroundColor: const Color.fromARGB(255, 255, 193, 7),

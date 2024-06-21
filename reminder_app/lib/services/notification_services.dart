@@ -115,6 +115,7 @@ class NotifyHelper {
     String date = data['date'];
     String endTime = data['endTime'];
     int remind = data['remind'];
+    print("Remind $remind");
 
     var timeComponents = getTimeComponents(endTime);
     int hour = int.parse(timeComponents['hour']!);
@@ -222,7 +223,8 @@ class NotifyHelper {
         'title': 'Error',
         'description': 'Error',
         'date': 'Error',
-        'endTime': 'Error'
+        'endTime': 'Error',
+        'reminder': 0,
       };
     }
   }

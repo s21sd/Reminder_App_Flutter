@@ -249,7 +249,6 @@ class _HomePageState extends State<HomePage> {
               endTime: data['endTime'],
               color: data['color'],
               remind: data['remind'],
-              repeat: data['repeat'],
             );
           }).toList();
 
@@ -258,7 +257,10 @@ class _HomePageState extends State<HomePage> {
             itemBuilder: (context, index) {
               final task = tasks[index];
               return GestureDetector(
-                  onTap: () {},
+                  onTap: () async {
+                    final userUid = 'wnMkvUGdEwSnNRyMc3AS0jjez2z1';
+                    await DbHelper().scheduleAllTasksNotifications(userUid);
+                  },
                   child: AnimationConfiguration.staggeredList(
                       position: index,
                       child: SlideAnimation(

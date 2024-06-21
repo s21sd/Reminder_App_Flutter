@@ -73,9 +73,9 @@ class _HomePageState extends State<HomePage> {
             //   docId: '3b242d80-c9f9-42c7-8ee0-293235de7b92',
             //   scheduledTime: DateTime.now().add(Duration(seconds: 10)),
             // );
-            NotifyHelper().scheduleNotificationBasedOnData(
-                userUid: widget.userId!,
-                docId: "b968eb3d-4ff5-4371-8f98-21c6dd783987");
+
+            // await DbHelper()
+            //     .scheduleAllTasksNotifications('wnMkvUGdEwSnNRyMc3AS0jjez2z1');
             // NotifyHelper().scheduledNotification2(
             //     title: 'this is first',
             //     body: "This is my first notification from chanel 2",
@@ -304,62 +304,62 @@ class _HomePageState extends State<HomePage> {
 
 // Show The Todos
 
-  Widget _showTasks() {
-    return Expanded(
-      child: StreamBuilder<QuerySnapshot>(
-        stream: DbHelper.readItems(widget.userId!),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            return const Center(child: Text('No tasks found.'));
-          }
+  // Widget _showTasks() {
+  //   return Expanded(
+  //     child: StreamBuilder<QuerySnapshot>(
+  //       stream: DbHelper.readItems(widget.userId!),
+  //       builder: (context, snapshot) {
+  //         if (snapshot.connectionState == ConnectionState.waiting) {
+  //           return const Center(child: CircularProgressIndicator());
+  //         }
+  //         if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+  //           return const Center(child: Text('No tasks found.'));
+  //         }
 
-          List<Task> tasks = snapshot.data!.docs.map((doc) {
-            var data = doc.data() as Map<String, dynamic>;
-            return Task(
-              id: data['id'],
-              title: data['title'],
-              description: data['description'],
-              isCompleted: data['isCompleted'],
-              date: data['date'],
-              startTime: data['startTime'],
-              endTime: data['endTime'],
-              color: data['color'],
-              remind: data['remind'],
-              repeat: data['repeat'],
-            );
-          }).toList();
+  //         List<Task> tasks = snapshot.data!.docs.map((doc) {
+  //           var data = doc.data() as Map<String, dynamic>;
+  //           return Task(
+  //             id: data['id'],
+  //             title: data['title'],
+  //             description: data['description'],
+  //             isCompleted: data['isCompleted'],
+  //             date: data['date'],
+  //             startTime: data['startTime'],
+  //             endTime: data['endTime'],
+  //             color: data['color'],
+  //             remind: data['remind'],
+  //             repeat: data['repeat'],
+  //           );
+  //         }).toList();
 
-          return ListView.builder(
-            itemCount: tasks.length,
-            itemBuilder: (context, index) {
-              final task = tasks[index];
-              return GestureDetector(
-                  onTap: () {},
-                  child: AnimationConfiguration.staggeredList(
-                      position: index,
-                      child: SlideAnimation(
-                        child: FadeInAnimation(
-                          child: Row(
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  _showBottomSheet(context, task);
-                                },
-                                child: TaskTile(task),
-                              )
-                            ],
-                          ),
-                        ),
-                      )));
-            },
-          );
-        },
-      ),
-    );
-  }
+  //         return ListView.builder(
+  //           itemCount: tasks.length,
+  //           itemBuilder: (context, index) {
+  //             final task = tasks[index];
+  //             return GestureDetector(
+  //                 onTap: () {},
+  //                 child: AnimationConfiguration.staggeredList(
+  //                     position: index,
+  //                     child: SlideAnimation(
+  //                       child: FadeInAnimation(
+  //                         child: Row(
+  //                           children: [
+  //                             GestureDetector(
+  //                               onTap: () {
+  //                                 _showBottomSheet(context, task);
+  //                               },
+  //                               child: TaskTile(task),
+  //                             )
+  //                           ],
+  //                         ),
+  //                       ),
+  //                     )));
+  //           },
+  //         );
+  //       },
+  //     ),
+  //   );
+  // }
 
   // For the buttom pop bar
   _showBottomSheet(BuildContext context, Task task) {

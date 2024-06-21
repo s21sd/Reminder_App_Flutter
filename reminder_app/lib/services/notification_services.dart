@@ -120,7 +120,6 @@ class NotifyHelper {
     int minute = int.parse(timeComponents['minute']!);
     String period = timeComponents['period']!;
 
-    // Convert 12-hour format to 24-hour format
     if (period == 'PM' && hour != 12) {
       hour += 12;
     } else if (period == 'AM' && hour == 12) {
@@ -136,6 +135,7 @@ class NotifyHelper {
       hour,
       minute,
     );
+    print(selectedTime);
 
     // If the selected time is in the past, schedule it for the next day
     if (selectedTime.isBefore(now)) {

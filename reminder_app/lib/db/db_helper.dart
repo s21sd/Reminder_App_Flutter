@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:reminder_app/services/notification_services.dart';
 import 'package:uuid/uuid.dart';
 
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -53,6 +54,45 @@ class DbHelper {
   }
 
   // For Reading the data
+
+  Future<void> scheduleAllTasksNotifications(String userUid) async {
+    CollectionReference taskCollection =
+        _mainCollection.doc(userUid).collection('userTodos');
+    try {
+      QuerySnapshot querySnapshot = await taskCollection.get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        for (var doc in querySnapshot.docs) {
+          print(doc.id);
+          NotifyHelper().scheduleNotificationBasedOnData(
+            userUid: userUid,
+            docId: doc.id,
+          );
+        }
+      } else {
+        print("No tasks found for user: $userUid");
+      }
+    } catch (e) {
+      print("Error fetching tasks: $e");
+    }
+  }
+
+  void listenForTaskChanges(String userUid) {
+    final notifyHelper = NotifyHelper();
+    _mainCollection
+        .doc(userUid)
+        .collection('userTodos')
+        .snapshots()
+        .listen((snapshot) {
+      for (var doc in snapshot.docs) {
+        notifyHelper.scheduleNotificationBasedOnData(
+          userUid: userUid,
+          docId: doc.id,
+        );
+      }
+    });
+  }
+
   static Stream<QuerySnapshot> readItems(String userUid) {
     CollectionReference todoItemCollection =
         _mainCollection.doc(userUid).collection('userTodos');
@@ -122,7 +162,6 @@ class DbHelper {
     return query.snapshots();
   }
 
-  
   // fetching the data for the notification from the firebase
   static Future<Map<String, String>> notificationData({
     required String userUid,

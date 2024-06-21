@@ -6,6 +6,7 @@ import 'package:reminder_app/db/db_helper.dart';
 import 'package:reminder_app/ui/theme.dart';
 import 'package:reminder_app/ui/widgets/input_field.dart';
 import 'package:reminder_app/ui/widgets/buttons.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 
 class AddTaskPage extends StatefulWidget {
   final String? userId;
@@ -176,16 +177,29 @@ class _AddTaskPageState extends State<AddTaskPage> {
       // Add to the database
       _addTaskToDb();
       Get.back();
+      final snackBar = SnackBar(
+        elevation: 0,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
+        content: AwesomeSnackbarContent(
+          title: 'Saved!',
+          message: 'Task Added Successfully',
+          contentType: ContentType.success,
+        ),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     } else if (_titleController.text.isEmpty || _noteController.text.isEmail) {
-      Get.snackbar("Required", "All field are required !",
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.white,
-          colorText: pinkClr,
-          icon: const Icon(
-            Icons.warning_amber_rounded,
-            color: Colors.red,
-            size: 30,
-          ));
+      final snackBar = SnackBar(
+        elevation: 0,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
+        content: AwesomeSnackbarContent(
+          title: 'Required!',
+          message: 'All fields are required!',
+          contentType: ContentType.failure,
+        ),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
 

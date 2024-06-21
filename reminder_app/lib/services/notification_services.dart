@@ -94,6 +94,17 @@ class NotifyHelper {
         .show(0, title, body, notificationDetails, payload: 'item x');
   }
 
+  Map<String, String> getTimeComponents(String time) {
+    var parts = time.split(' ');
+    var timeParts = parts[0].split('.');
+
+    return {
+      'hour': timeParts[0],
+      'minute': timeParts[1],
+      'period': parts[1],
+    };
+  }
+
   Future<void> scheduleNotificationBasedOnData({
     required String userUid,
     required String docId,
@@ -103,14 +114,33 @@ class NotifyHelper {
 
     String date = data['date'];
     String endTime = data['endTime'];
-    int remind = data['remind'];
-    String repeat = data['repeat'];
-    print(date);
-    print(endTime);
-    print(remind);
-    print(repeat);
 
-    DateTime selectedTime = DateTime.now().add(Duration(seconds: 10));
+    var timeComponents = getTimeComponents(endTime);
+    int hour = int.parse(timeComponents['hour']!);
+    int minute = int.parse(timeComponents['minute']!);
+    String period = timeComponents['period']!;
+
+    // Convert 12-hour format to 24-hour format
+    if (period == 'PM' && hour != 12) {
+      hour += 12;
+    } else if (period == 'AM' && hour == 12) {
+      hour = 0;
+    }
+
+    DateTime now = DateTime.now();
+    DateTime selectedDate = DateFormat.yMd().parse(date);
+    DateTime selectedTime = DateTime(
+      selectedDate.year,
+      selectedDate.month,
+      selectedDate.day,
+      hour,
+      minute,
+    );
+
+    // If the selected time is in the past, schedule it for the next day
+    if (selectedTime.isBefore(now)) {
+      selectedTime = selectedTime.add(const Duration(days: 1));
+    }
 
     // Schedule the notification
     await scheduledNotification2(
@@ -161,15 +191,15 @@ class NotifyHelper {
         String description = data['description'] ?? 'No description';
         String date = data['date'] ?? 'No date';
         String endTime = data['endTime'] ?? 'No endTime';
-        int remind = data['remind'] ?? 5;
+        int reminder = data['remind'] ?? 5;
         String repeat = data['repeat'] ?? 'None';
         return {
           'title': title,
           'description': description,
           'date': date,
           'endTime': endTime,
-          'remind': remind,
-          'repeat': repeat,
+          'reminder': reminder,
+          'repeat': repeat
         };
       } else {
         print('No such doc');
@@ -178,8 +208,8 @@ class NotifyHelper {
           'description': 'No description',
           'date': 'No date',
           'endTime': 'No endTime',
-          'remind': 5,
-          'repeat': 'None'
+          'reminder': 'No',
+          'repeat': 'No'
         };
       }
     } catch (e) {
@@ -188,9 +218,7 @@ class NotifyHelper {
         'title': 'Error',
         'description': 'Error',
         'date': 'Error',
-        'endTime': 'Error',
-        'remind': 5,
-        'repeat': 'None'
+        'endTime': 'Error'
       };
     }
   }

@@ -1,3 +1,4 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -82,6 +83,18 @@ class LoginPage extends StatelessWidget {
                             onPressed: () async {
                               UserCredential userCredential =
                                   await FirebaseServices().signInWithGoogle();
+                              final snackBar = SnackBar(
+                                elevation: 0,
+                                behavior: SnackBarBehavior.floating,
+                                backgroundColor: Colors.transparent,
+                                content: AwesomeSnackbarContent(
+                                  title: 'Login',
+                                  message: 'Login Successful',
+                                  contentType: ContentType.success,
+                                ),
+                              );
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(snackBar);
                               Get.to(() => HomePage(
                                   imgUrl: userCredential.user?.photoURL,
                                   userId: userCredential.user!.uid));

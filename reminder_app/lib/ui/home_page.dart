@@ -1,3 +1,4 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -74,7 +75,7 @@ class _HomePageState extends State<HomePage> {
             // );
             NotifyHelper().scheduleNotificationBasedOnData(
                 userUid: widget.userId!,
-                docId: "aa722709-655f-47d5-9698-0941e3cc430d");
+                docId: "b968eb3d-4ff5-4371-8f98-21c6dd783987");
             // NotifyHelper().scheduledNotification2(
             //     title: 'this is first',
             //     body: "This is my first notification from chanel 2",
@@ -134,6 +135,17 @@ class _HomePageState extends State<HomePage> {
             onPressed: () {
               logoutConfirmed = true;
               Navigator.of(context).pop();
+              final snackBar = SnackBar(
+                elevation: 0,
+                behavior: SnackBarBehavior.floating,
+                backgroundColor: Colors.transparent,
+                content: AwesomeSnackbarContent(
+                  title: 'Logout!',
+                  message: 'Logout Successfully',
+                  contentType: ContentType.success,
+                ),
+              );
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
             },
             child: const Text("OK"),
           ),
@@ -372,10 +384,18 @@ class _HomePageState extends State<HomePage> {
                   label: "Task Completed",
                   onTap: () async {
                     await _updateTaskToDb(task);
-                    // await DbHelper().notificationData(
-                    //     userUid: widget.userId!,
-                    //     docId: '3b242d80-c9f9-42c7-8ee0-293235de7b92');
-                    Get.back();
+                    // Get.back();
+                    final snackBar = SnackBar(
+                      elevation: 0,
+                      behavior: SnackBarBehavior.floating,
+                      backgroundColor: Colors.transparent,
+                      content: AwesomeSnackbarContent(
+                        title: 'Updated!',
+                        message: 'Task updated Successfully',
+                        contentType: ContentType.success,
+                      ),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   },
                   clr: primaryClr,
                   context: context),
@@ -387,6 +407,17 @@ class _HomePageState extends State<HomePage> {
                   docId: task.id.toString(),
                 );
                 Get.back();
+                final snackBar = SnackBar(
+                  elevation: 0,
+                  behavior: SnackBarBehavior.floating,
+                  backgroundColor: Colors.transparent,
+                  content: AwesomeSnackbarContent(
+                    title: 'Deleted',
+                    message: 'Task deleted Successfully',
+                    contentType: ContentType.success,
+                  ),
+                );
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
               },
               clr: Colors.red,
               context: context),

@@ -258,8 +258,7 @@ class _HomePageState extends State<HomePage> {
               final task = tasks[index];
               return GestureDetector(
                   onTap: () async {
-                    final userUid = 'wnMkvUGdEwSnNRyMc3AS0jjez2z1';
-                    await DbHelper().scheduleAllTasksNotifications(userUid);
+                   
                   },
                   child: AnimationConfiguration.staggeredList(
                       position: index,

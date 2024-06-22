@@ -96,7 +96,7 @@ class NotifyHelper {
 
   Map<String, String> getTimeComponents(String time) {
     var parts = time.split(' ');
-    var timeParts = parts[0].split('.');
+    var timeParts = parts[0].split(':');
 
     return {
       'hour': timeParts[0],
@@ -124,108 +124,50 @@ class NotifyHelper {
 
     if (period == 'PM' && hour != 12) {
       hour += 12;
-    } else if (period == 'AM' && hour == 12) {
+    }
+    if (period == 'AM' && hour == 12) {
       hour = 0;
     }
-    int newmin = 0;
-    if (minute >= 5) {
-      newmin = (minute - remind).abs();
-    } else {
-      newmin = minute;
-    }
 
-    DateTime now = DateTime.now();
-    DateTime selectedDate = DateFormat.yMd().parse(date);
-    DateTime selectedTime = DateTime(
-      selectedDate.year,
-      selectedDate.month,
-      selectedDate.day,
-      hour,
-      newmin,
-    );
-    print(selectedTime);
+    DateTime scheduledNotificationDateTime = DateFormat.yMd()
+        .parse(date)
+        .add(Duration(hours: hour, minutes: minute));
 
-    // If the selected time is in the past, schedule it for the next day
-    if (selectedTime.isBefore(now)) {
-      selectedTime = selectedTime.add(const Duration(days: 1));
-    }
+    var tzScheduledDateTime = tz.TZDateTime.from(
+        scheduledNotificationDateTime.subtract(Duration(minutes: remind)),
+        tz.local);
 
-    // Schedule the notification
-    await scheduledNotification2(
-      title: data['title'],
-      body: data['description'],
-      scheduledTime: selectedTime,
-    );
-  }
-
-  Future<void> scheduledNotification2({
-    required String title,
-    required String body,
-    required DateTime scheduledTime,
-  }) async {
     await flutterLocalNotificationsPlugin.zonedSchedule(
-      0,
-      title,
-      body,
-      tz.TZDateTime.from(scheduledTime, tz.local),
+      int.parse(docId),
+      data['title'],
+      data['description'],
+      tzScheduledDateTime,
       const NotificationDetails(
         android: AndroidNotificationDetails(
           'your_channel_id',
           'your_channel_name',
           channelDescription: 'your_channel_description',
-          importance: Importance.max,
-          priority: Priority.high,
           icon: 'appicon',
         ),
       ),
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+      matchDateTimeComponents: DateTimeComponents.time,
     );
   }
+}
 
-  static Future<Map<String, dynamic>> notificationData({
-    required String userUid,
-    required String docId,
-  }) async {
-    DocumentReference documentReference =
-        _mainCollection.doc(userUid).collection("userTodos").doc(docId);
-    try {
-      DocumentSnapshot documentSnapshot = await documentReference.get();
-      if (documentSnapshot.exists) {
-        Map<String, dynamic> data =
-            documentSnapshot.data() as Map<String, dynamic>;
-        String title = data['title'] ?? 'No Title';
-        String description = data['description'] ?? 'No description';
-        String date = data['date'] ?? 'No date';
-        String endTime = data['endTime'] ?? 'No endTime';
-        int reminder = data['remind'] ?? 5;
-        return {
-          'title': title,
-          'description': description,
-          'date': date,
-          'endTime': endTime,
-          'reminder': reminder,
-        };
-      } else {
-        print('No such doc');
-        return {
-          'title': 'No Title',
-          'description': 'No description',
-          'date': 'No date',
-          'endTime': 'No endTime',
-          'reminder': 'No',
-        };
-      }
-    } catch (e) {
-      print('Error fetching document: $e');
-      return {
-        'title': 'Error',
-        'description': 'Error',
-        'date': 'Error',
-        'endTime': 'Error',
-        'reminder': 0,
-      };
-    }
+Future<Map<String, dynamic>> notificationData({
+  required String userUid,
+  required String docId,
+}) async {
+  DocumentReference documentReferencer =
+      _mainCollection.doc(userUid).collection('userTodos').doc(docId);
+  DocumentSnapshot documentSnapshot = await documentReferencer.get();
+
+  if (documentSnapshot.exists) {
+    return documentSnapshot.data() as Map<String, dynamic>;
+  } else {
+    return {};
   }
 }

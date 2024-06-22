@@ -22,9 +22,9 @@ class NotifyHelper {
     // For iOS Notifications
     final DarwinInitializationSettings initializationSettingsIOS =
         DarwinInitializationSettings(
-            requestSoundPermission: false,
-            requestBadgePermission: false,
-            requestAlertPermission: false,
+            requestSoundPermission: true,
+            requestBadgePermission: true,
+            requestAlertPermission: true,
             onDidReceiveLocalNotification: onDidReceiveLocalNotification);
 
     // For Android Notifications
@@ -114,8 +114,7 @@ class NotifyHelper {
 
     String date = data['date'];
     String endTime = data['endTime'];
-    int remind = data['remind'];
-    print("Remind $remind");
+    int remind = data['remind'] ?? 5; // Provide a default value
 
     var timeComponents = getTimeComponents(endTime);
     int hour = int.parse(timeComponents['hour']!);
@@ -124,50 +123,108 @@ class NotifyHelper {
 
     if (period == 'PM' && hour != 12) {
       hour += 12;
-    }
-    if (period == 'AM' && hour == 12) {
+    } else if (period == 'AM' && hour == 12) {
       hour = 0;
     }
 
-    DateTime scheduledNotificationDateTime = DateFormat.yMd()
-        .parse(date)
-        .add(Duration(hours: hour, minutes: minute));
+    int newmin = minute - remind;
+    if (newmin < 0) {
+      newmin = 60 + newmin;
+      hour -= 1;
+      if (hour < 0) hour = 23;
+    }
 
-    var tzScheduledDateTime = tz.TZDateTime.from(
-        scheduledNotificationDateTime.subtract(Duration(minutes: remind)),
-        tz.local);
+    DateTime now = DateTime.now();
+    DateTime selectedDate = DateFormat.yMd().parse(date);
+    DateTime selectedTime = DateTime(
+      selectedDate.year,
+      selectedDate.month,
+      selectedDate.day,
+      hour,
+      newmin,
+    );
 
+    // If the selected time is in the past, do not schedule the notification
+    if (selectedTime.isAfter(now)) {
+      await scheduledNotification2(
+        title: data['title'],
+        body: data['description'],
+        scheduledTime: selectedTime,
+      );
+    } else {
+      print('Scheduled time is in the past, notification not scheduled.');
+    }
+  }
+
+  Future<void> scheduledNotification2({
+    required String title,
+    required String body,
+    required DateTime scheduledTime,
+  }) async {
     await flutterLocalNotificationsPlugin.zonedSchedule(
-      int.parse(docId),
-      data['title'],
-      data['description'],
-      tzScheduledDateTime,
+      0,
+      title,
+      body,
+      tz.TZDateTime.from(scheduledTime, tz.local),
       const NotificationDetails(
         android: AndroidNotificationDetails(
           'your_channel_id',
           'your_channel_name',
           channelDescription: 'your_channel_description',
+          importance: Importance.max,
+          priority: Priority.high,
           icon: 'appicon',
         ),
       ),
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
-      matchDateTimeComponents: DateTimeComponents.time,
+      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+      matchDateTimeComponents: DateTimeComponents.dateAndTime,
     );
   }
-}
 
-Future<Map<String, dynamic>> notificationData({
-  required String userUid,
-  required String docId,
-}) async {
-  DocumentReference documentReferencer =
-      _mainCollection.doc(userUid).collection('userTodos').doc(docId);
-  DocumentSnapshot documentSnapshot = await documentReferencer.get();
-
-  if (documentSnapshot.exists) {
-    return documentSnapshot.data() as Map<String, dynamic>;
-  } else {
-    return {};
+  static Future<Map<String, dynamic>> notificationData({
+    required String userUid,
+    required String docId,
+  }) async {
+    DocumentReference documentReference =
+        _mainCollection.doc(userUid).collection("userTodos").doc(docId);
+    try {
+      DocumentSnapshot documentSnapshot = await documentReference.get();
+      if (documentSnapshot.exists) {
+        Map<String, dynamic> data =
+            documentSnapshot.data() as Map<String, dynamic>;
+        String title = data['title'] ?? 'No Title';
+        String description = data['description'] ?? 'No description';
+        String date = data['date'] ?? 'No date';
+        String endTime = data['endTime'] ?? 'No endTime';
+        int reminder = data['remind'] ?? 5;
+        return {
+          'title': title,
+          'description': description,
+          'date': date,
+          'endTime': endTime,
+          'reminder': reminder,
+        };
+      } else {
+        print('No such doc');
+        return {
+          'title': 'No Title',
+          'description': 'No description',
+          'date': 'No date',
+          'endTime': 'No endTime',
+          'reminder': 5,
+        };
+      }
+    } catch (e) {
+      print('Error fetching document: $e');
+      return {
+        'title': 'Error',
+        'description': 'Error',
+        'date': 'Error',
+        'endTime': 'Error',
+        'reminder': 5,
+      };
+    }
   }
 }

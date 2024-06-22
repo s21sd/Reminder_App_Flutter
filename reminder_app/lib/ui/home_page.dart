@@ -60,7 +60,10 @@ class _HomePageState extends State<HomePage> {
   AppBar _appBar(BuildContext context) {
     return AppBar(
       leading: GestureDetector(
-          onTap: () async {},
+          onTap: () async {
+            final userUid = 'wnMkvUGdEwSnNRyMc3AS0jjez2z1';
+            await DbHelper().scheduleAllTasksNotifications(userUid);
+          },
           child: Container(
             margin: const EdgeInsets.all(8),
             width: 40,
@@ -257,9 +260,7 @@ class _HomePageState extends State<HomePage> {
             itemBuilder: (context, index) {
               final task = tasks[index];
               return GestureDetector(
-                  onTap: () async {
-                   
-                  },
+                  onTap: () async {},
                   child: AnimationConfiguration.staggeredList(
                       position: index,
                       child: SlideAnimation(

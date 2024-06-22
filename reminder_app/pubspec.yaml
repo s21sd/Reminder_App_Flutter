@@ -76,7 +76,6 @@ dependencies:
   timezone: ^0.9.3
 
   # for calling the fucntion everytime for the notification
-  workmanager: ^0.5.2  
 
 dev_dependencies:
   flutter_test:

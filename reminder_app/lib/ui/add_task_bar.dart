@@ -223,14 +223,14 @@ class _AddTaskPageState extends State<AddTaskPage> {
   // For the calender
 
   _getDateFromUser() async {
-    DateTime? _pickerDate = await showDatePicker(
+    DateTime? pickerDate = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
         firstDate: DateTime(2015),
         lastDate: DateTime(2100));
-    if (_pickerDate != null) {
+    if (pickerDate != null) {
       setState(() {
-        _selectedDate = _pickerDate;
+        _selectedDate = pickerDate;
       });
     } else {
       print("It's null or something is wrong");
@@ -240,17 +240,18 @@ class _AddTaskPageState extends State<AddTaskPage> {
   // For the time pick
 
   _getTimeFromUser({required bool isStarTime}) async {
-    var _pickedTime = await _showTimePicker();
+    var pickedTime = await _showTimePicker();
 
-    String _formatedTime = _pickedTime.format(context);
-    if (_pickedTime == null) {
+    // ignore: use_build_context_synchronously
+    String formatedTime = pickedTime.format(context);
+    if (pickedTime == null) {
       print("time Cancelled");
     } else if (isStarTime == true) {
       setState(() {});
-      _startTime = _formatedTime;
+      _startTime = formatedTime;
     } else if (isStarTime == false) {
       setState(() {});
-      _endTime = _formatedTime;
+      _endTime = formatedTime;
     }
   }
 

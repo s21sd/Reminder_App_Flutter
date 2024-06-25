@@ -1,14 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:reminder_app/services/notification_services.dart';
 import 'package:uuid/uuid.dart';
 
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 final CollectionReference _mainCollection = _firestore.collection('Todos');
-final _firebaseMessaging = FirebaseMessaging.instance;
-final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
 
 class DbHelper {
   // For Writing the data
@@ -22,16 +17,16 @@ class DbHelper {
     required int remind,
     required int color,
   }) async {
-    var uuid = Uuid();
-    var random_id = uuid.v4();
+    var uuid = const Uuid();
+    var randomId = uuid.v4();
     DocumentReference documentReferencer = _mainCollection
         .doc(userUid)
         .collection('userTodos')
         .doc(
-            random_id); // This line is so imp we have to add the actual id so that We can Use it for later
+            randomId); // This line is so imp we have to add the actual id so that We can Use it for later
 
     Map<String, dynamic> data = <String, dynamic>{
-      "id": random_id,
+      "id": randomId,
       "title": title,
       "description": description,
       "date": date,

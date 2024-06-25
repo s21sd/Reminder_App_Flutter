@@ -94,7 +94,7 @@ class _HomePageState extends State<HomePage> {
             color: Colors.black,
           ),
         ),
-        const SizedBox(width: 20),
+        const SizedBox(width: 15),
       ],
     );
   }
@@ -377,6 +377,7 @@ class _HomePageState extends State<HomePage> {
                         contentType: ContentType.success,
                       ),
                     );
+                    // ignore: use_build_context_synchronously
                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   },
                   clr: primaryClr,
@@ -399,6 +400,7 @@ class _HomePageState extends State<HomePage> {
                     contentType: ContentType.success,
                   ),
                 );
+                // ignore: use_build_context_synchronously
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
               },
               clr: Colors.red,

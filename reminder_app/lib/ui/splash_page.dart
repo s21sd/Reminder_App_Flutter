@@ -29,7 +29,6 @@ class _SplashScreenState extends State<MySplashScreen>
             }
           });
   }
-
   late AnimationController _buttonWidthController;
   late Animation<double> _buttonWidthAnimation;
   void _initButtonWidth(double screenWidth) {

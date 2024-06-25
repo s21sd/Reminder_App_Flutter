@@ -7,22 +7,22 @@ class NotificationDetailsScreen extends StatelessWidget {
   final String endTime;
 
   const NotificationDetailsScreen({
-    Key? key,
+    super.key,
     required this.title,
     required this.description,
     required this.startTime,
     required this.endTime,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Notification Details'),
+        title: const Text('Notification Details'),
       ),
       body: Center(
         child: Card(
-          margin: EdgeInsets.all(16.0),
+          margin: const EdgeInsets.all(16.0),
           color: Colors.amber,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15.0),

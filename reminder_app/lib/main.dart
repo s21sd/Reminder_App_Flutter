@@ -25,7 +25,7 @@ Future<void> main() async {
 
   final box = GetStorage();
   final userUid = box.read('userId') ?? 'defaultUserId';
-  
+
   if (userUid != 'defaultUserId') {
     await DbHelper().scheduleAllTasksNotifications(userUid);
     DbHelper().listenForTaskChanges(userUid);

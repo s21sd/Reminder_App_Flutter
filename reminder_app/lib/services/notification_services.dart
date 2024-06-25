@@ -29,7 +29,7 @@ class NotifyHelper {
             onDidReceiveLocalNotification: onDidReceiveLocalNotification);
 
     // For Android Notifications
-    const AndroidInitializationSettings initializationSettingsAndroid =
+    final AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings("appicon");
 
     // Initializing the devices
@@ -52,15 +52,19 @@ class NotifyHelper {
     final String? payload = notificationResponse.payload;
     if (payload != null) {
       // Extract data from the payload
-      print(payload);
+      final data = payload.split('|');
+      final title = data[0];
+      final description = data[1];
+      String startTime = data[2];
+      final endTime = data[3];
 
       // Navigate to the notification details screen
-      // Get.to(() => NotificationDetailsScreen(
-      //       title: title,
-      //       description: description,
-      //       startTime: startTime,
-      //       endTime: endTime,
-      //     ));
+      Get.to(() => NotificationDetailsScreen(
+            title: title,
+            description: description,
+            startTime: startTime,
+            endTime: endTime,
+          ));
     } else {
       print("Notification Done");
     }

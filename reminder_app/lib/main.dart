@@ -19,18 +19,26 @@ Future<void> main() async {
     storageBucket: 'foodapp2-3a233.appspot.com',
   ));
   await GetStorage.init();
+
   final notifyHelper = NotifyHelper();
   notifyHelper.initializeNotification();
-  final userUid = 'wnMkvUGdEwSnNRyMc3AS0jjez2z1';
-  await DbHelper().scheduleAllTasksNotifications(userUid);
-  DbHelper().listenForTaskChanges(userUid);
+
+  final box = GetStorage();
+  final userUid = box.read('userId') ?? 'defaultUserId';
+  print(userUid);
+  if (userUid != 'defaultUserId') {
+    await DbHelper().scheduleAllTasksNotifications(userUid);
+    DbHelper().listenForTaskChanges(userUid);
+  } else {
+    print("Not definer");
+  }
+
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(

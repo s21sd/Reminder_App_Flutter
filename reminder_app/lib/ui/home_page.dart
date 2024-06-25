@@ -61,8 +61,8 @@ class _HomePageState extends State<HomePage> {
     return AppBar(
       leading: GestureDetector(
           onTap: () async {
-            final userUid = 'wnMkvUGdEwSnNRyMc3AS0jjez2z1';
-            await DbHelper().scheduleAllTasksNotifications(userUid);
+            // final userUid = 'wnMkvUGdEwSnNRyMc3AS0jjez2z1';
+            // await DbHelper().scheduleAllTasksNotifications(userUid);
           },
           child: Container(
             margin: const EdgeInsets.all(8),

@@ -2,6 +2,7 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:lottie/lottie.dart';
 import 'package:reminder_app/ui/home_page.dart';
 import 'package:reminder_app/ui/widgets/google_auth.dart';
@@ -83,6 +84,11 @@ class LoginPage extends StatelessWidget {
                             onPressed: () async {
                               UserCredential userCredential =
                                   await FirebaseServices().signInWithGoogle();
+
+                              // Store userId in GetStorage
+                              final box = GetStorage();
+                              box.write('userId', userCredential.user!.uid);
+
                               final snackBar = SnackBar(
                                 elevation: 0,
                                 behavior: SnackBarBehavior.floating,

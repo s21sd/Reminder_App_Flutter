@@ -23,7 +23,7 @@ class NotificationDetailsScreen extends StatelessWidget {
       body: Center(
         child: Card(
           margin: EdgeInsets.all(16.0),
-          color: Colors.amber[200],
+          color: Colors.amber,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15.0),
           ),

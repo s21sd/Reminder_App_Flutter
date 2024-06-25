@@ -25,12 +25,10 @@ Future<void> main() async {
 
   final box = GetStorage();
   final userUid = box.read('userId') ?? 'defaultUserId';
-  print(userUid);
+  
   if (userUid != 'defaultUserId') {
     await DbHelper().scheduleAllTasksNotifications(userUid);
     DbHelper().listenForTaskChanges(userUid);
-  } else {
-    print("Not definer");
   }
 
   runApp(const MyApp());

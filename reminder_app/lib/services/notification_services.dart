@@ -98,7 +98,7 @@ class NotifyHelper {
             importance: Importance.max,
             priority: Priority.high,
             ticker: 'ticker',
-            icon: 'appicon');
+            icon: 'appicon'); // Ensure this matches the icon resource name
     const NotificationDetails notificationDetails =
         NotificationDetails(android: androidNotificationDetails);
     await flutterLocalNotificationsPlugin
@@ -186,7 +186,7 @@ class NotifyHelper {
           channelDescription: 'your_channel_description',
           importance: Importance.max,
           priority: Priority.high,
-          icon: 'appicon',
+          icon: 'appicon', // Ensure this matches the icon resource name
         ),
       ),
       payload:

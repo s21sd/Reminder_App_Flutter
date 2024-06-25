@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:reminder_app/ui/widgets/notification_details_screen.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
@@ -28,7 +29,7 @@ class NotifyHelper {
             onDidReceiveLocalNotification: onDidReceiveLocalNotification);
 
     // For Android Notifications
-    final AndroidInitializationSettings initializationSettingsAndroid =
+    const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings("appicon");
 
     // Initializing the devices
@@ -49,14 +50,20 @@ class NotifyHelper {
   void onDidReceiveNotificationResponse(
       NotificationResponse notificationResponse) async {
     final String? payload = notificationResponse.payload;
-    if (notificationResponse.payload != null) {
-      print('notification payload: $payload');
+    if (payload != null) {
+      // Extract data from the payload
+      print(payload);
+
+      // Navigate to the notification details screen
+      // Get.to(() => NotificationDetailsScreen(
+      //       title: title,
+      //       description: description,
+      //       startTime: startTime,
+      //       endTime: endTime,
+      //     ));
     } else {
       print("Notification Done");
     }
-    Get.to(() => Container(
-          color: Colors.blue,
-        ));
   }
 
   void requestIOSPermissions() {
@@ -150,6 +157,7 @@ class NotifyHelper {
         title: data['title'],
         body: data['description'],
         scheduledTime: selectedTime,
+        startTime: endTime,
       );
     } else {
       print('Scheduled time is in the past, notification not scheduled.');
@@ -160,6 +168,7 @@ class NotifyHelper {
     required String title,
     required String body,
     required DateTime scheduledTime,
+    required String startTime,
   }) async {
     await flutterLocalNotificationsPlugin.zonedSchedule(
       0,
@@ -176,6 +185,8 @@ class NotifyHelper {
           icon: 'appicon',
         ),
       ),
+      payload:
+          '$title|$body|${DateFormat.Hm().format(scheduledTime)}|$startTime',
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,

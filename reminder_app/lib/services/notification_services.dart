@@ -13,6 +13,7 @@ final CollectionReference _mainCollection = _firestore.collection('Todos');
 class NotifyHelper {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
+      
 
   NotifyHelper() {
     tz.initializeTimeZones();

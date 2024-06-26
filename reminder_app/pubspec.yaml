@@ -75,6 +75,8 @@ dependencies:
   firebase_analytics: ^11.0.1
   timezone: ^0.9.3
 
+  notification_permissions: ^0.6.1
+
   # for calling the fucntion everytime for the notification
 
 dev_dependencies:

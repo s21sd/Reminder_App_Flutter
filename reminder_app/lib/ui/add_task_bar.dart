@@ -222,15 +222,16 @@ class _AddTaskPageState extends State<AddTaskPage> {
 
   // For the calender
 
-  _getDateFromUser() async {
+  Future<void> _getDateFromUser() async {
     DateTime? pickerDate = await showDatePicker(
-        context: context,
-        initialDate: DateTime.now(),
-        firstDate: DateTime(2015),
-        lastDate: DateTime(2100));
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2015),
+      lastDate: DateTime(2100),
+    );
     if (pickerDate != null) {
       setState(() {
-        _selectedDate = pickerDate;
+        _selectedDate == pickerDate;
       });
     } else {
       print("It's null or something is wrong");
@@ -312,7 +313,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
       userUid: widget.userId!,
       title: _titleController.text,
       description: _noteController.text,
-      date: DateFormat.yMd().format(_selectedDate),
+      date: DateFormat('M/dd/yyyy').format(_selectedDate),
       startTime: _startTime,
       endTime: _endTime,
       remind: _selectedRemind,

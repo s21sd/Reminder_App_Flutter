@@ -30,6 +30,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late NotifyHelper notifyHelper;
   DateTime _selectedDate = DateTime.now();
+
   @override
   void initState() {
     super.initState();
@@ -212,11 +213,12 @@ class _HomePageState extends State<HomePage> {
 
   // Show the todos based on the date
   Widget _showTasksForDate(DateTime selectedDate) {
-    String formatedDate = DateFormat('M/dd/yyyy').format(selectedDate);
-    // await DbHelper.readItemsForDate(widget.userId!, formatedDate);
+    print("Home Page date $_selectedDate");
+    String formattedDate = DateFormat('M/dd/yyyy').format(selectedDate);
+    print(formattedDate);
     return Expanded(
       child: StreamBuilder<QuerySnapshot>(
-        stream: DbHelper.readItemsForDate(widget.userId!, formatedDate),
+        stream: DbHelper.readItemsForDate(widget.userId!, formattedDate),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());

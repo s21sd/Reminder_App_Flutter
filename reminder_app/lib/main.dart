@@ -8,24 +8,9 @@ import 'package:reminder_app/services/theme_services.dart';
 import 'package:reminder_app/ui/splash_page.dart';
 import 'package:reminder_app/ui/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
-// import 'package:notification_permissions/notification_permissions.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  // Future<PermissionStatus> permissionStatus =
-  //     NotificationPermissions.requestNotificationPermissions(
-  //   iosSettings: const NotificationSettingsIos(
-  //     sound: true,
-  //     badge: true,
-  //     alert: true,
-  //   ),
-  //   openSettings:
-  //       true,
-  // );
-  // PermissionStatus status = await permissionStatus;
-  // print(status);
-
   await Firebase.initializeApp(
       options: const FirebaseOptions(
     apiKey: 'AIzaSyB6GjPE0dQ8-WDHwrPvGkXRmNMUEY-G8wI',

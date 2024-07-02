@@ -213,9 +213,7 @@ class _HomePageState extends State<HomePage> {
 
   // Show the todos based on the date
   Widget _showTasksForDate(DateTime selectedDate) {
-    print("Home Page date $_selectedDate");
     String formattedDate = DateFormat('M/dd/yyyy').format(selectedDate);
-    print(formattedDate);
     return Expanded(
       child: StreamBuilder<QuerySnapshot>(
         stream: DbHelper.readItemsForDate(widget.userId!, formattedDate),

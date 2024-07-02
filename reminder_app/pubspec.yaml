@@ -76,6 +76,7 @@ dependencies:
   timezone: ^0.9.3
 
   notification_permissions: ^0.6.1
+  permission_handler: ^11.3.1
 
   # for calling the fucntion everytime for the notification
 

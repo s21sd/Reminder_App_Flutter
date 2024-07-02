@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:reminder_app/ui/widgets/notification_details_screen.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
@@ -13,7 +14,6 @@ final CollectionReference _mainCollection = _firestore.collection('Todos');
 class NotifyHelper {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
-      
 
   NotifyHelper() {
     tz.initializeTimeZones();
@@ -41,6 +41,23 @@ class NotifyHelper {
 
     await flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onDidReceiveNotificationResponse: onDidReceiveNotificationResponse);
+  }
+
+// For Taking the permissions from the user with the help of permission handler
+
+  Future<void> requestPermission({required Permission permission}) async {
+    final status = await permission.status;
+    if (status.isGranted) {
+      print('Permission already granted');
+    } else if (status.isDenied) {
+      if (await permission.request().isGranted) {
+        print('Permission granted');
+      } else {
+        print('Permission denied');
+      }
+    } else {
+      print("final Permission Denied");
+    }
   }
 
   Future onDidReceiveLocalNotification(

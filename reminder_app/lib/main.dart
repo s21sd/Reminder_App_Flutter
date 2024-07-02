@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:reminder_app/db/db_helper.dart';
 import 'package:reminder_app/services/notification_services.dart';
 import 'package:reminder_app/services/theme_services.dart';
@@ -11,6 +12,7 @@ import 'package:firebase_core/firebase_core.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   // Future<PermissionStatus> permissionStatus =
   //     NotificationPermissions.requestNotificationPermissions(
   //   iosSettings: const NotificationSettingsIos(
@@ -35,6 +37,7 @@ Future<void> main() async {
   await GetStorage.init();
 
   final notifyHelper = NotifyHelper();
+  notifyHelper.requestPermission(permission: Permission.notification);
   notifyHelper.initializeNotification();
 
   notifyHelper.displayNotification(

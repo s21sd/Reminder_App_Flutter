@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:lottie/lottie.dart';
+import 'package:get/get.dart';
+import 'package:reminder_app/ui/home_page.dart';
 import 'package:reminder_app/ui/login_page.dart';
 
 class MySplashScreen extends StatefulWidget {
@@ -16,6 +18,21 @@ class _SplashScreenState extends State<MySplashScreen>
 
   late AnimationController _buttonScaleController;
   late Animation<double> _buttonScaleAnimation;
+  late AnimationController _buttonWidthController;
+  late Animation<double> _buttonWidthAnimation;
+  late AnimationController _positionedController;
+  late Animation<double> _positionedAnimation;
+  late AnimationController _screenScaleController;
+  late Animation<double> _screenScaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _initButtonScale();
+    _initScreenScale();
+    _checkUserLoggedIn();
+  }
+
   void _initButtonScale() {
     _buttonScaleController = AnimationController(
       vsync: this,
@@ -29,8 +46,7 @@ class _SplashScreenState extends State<MySplashScreen>
             }
           });
   }
-  late AnimationController _buttonWidthController;
-  late Animation<double> _buttonWidthAnimation;
+
   void _initButtonWidth(double screenWidth) {
     _buttonWidthController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 200));
@@ -43,12 +59,9 @@ class _SplashScreenState extends State<MySplashScreen>
       });
   }
 
-  late AnimationController _positionedController;
-  late Animation<double> _positionedAnimation;
   void _initPositioned(double screenWidth) {
     _positionedController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 400));
-    // 160 = 20 left padding + 20 right padding + 10 left positioned + 10 right positioned + 100 button width
     _positionedAnimation = Tween<double>(begin: 10, end: screenWidth - 160)
         .animate(_positionedController)
       ..addStatusListener((status) {
@@ -58,8 +71,6 @@ class _SplashScreenState extends State<MySplashScreen>
       });
   }
 
-  late AnimationController _screenScaleController;
-  late Animation<double> _screenScaleAnimation;
   void _initScreenScale() {
     _screenScaleController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 400));
@@ -67,24 +78,43 @@ class _SplashScreenState extends State<MySplashScreen>
         Tween<double>(begin: 1, end: 24).animate(_screenScaleController)
           ..addStatusListener((status) {
             if (status == AnimationStatus.completed) {
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (BuildContext context) => const LoginPage()));
+              _navigateToNextPage();
             }
           });
   }
 
-  @override
-  void initState() {
-    _initButtonScale();
-    _initScreenScale();
-    super.initState();
+  Future<void> _checkUserLoggedIn() async {
+    await Future.delayed(
+        const Duration(seconds: 2)); // Simulating a delay for the splash screen
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      Get.offAll(() => HomePage(
+            imgUrl: user.photoURL,
+            userId: user.uid,
+          ));
+    } else {
+      Get.offAll(() => const LoginPage());
+    }
+  }
+
+  void _navigateToNextPage() {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      Get.offAll(() => HomePage(
+            imgUrl: user.photoURL,
+            userId: user.uid,
+          ));
+    } else {
+      Get.offAll(() => const LoginPage());
+    }
   }
 
   @override
   void dispose() {
     _buttonScaleController.dispose();
+    _buttonWidthController.dispose();
+    _positionedController.dispose();
+    _screenScaleController.dispose();
     super.dispose();
   }
 
@@ -119,7 +149,7 @@ class _SplashScreenState extends State<MySplashScreen>
                   height: 20,
                 ),
                 const Text(
-                  'Remindify App',
+                  'reminder_app App',
                   style: TextStyle(
                     color: Color.fromARGB(255, 0, 0, 0),
                     decoration: TextDecoration.none,

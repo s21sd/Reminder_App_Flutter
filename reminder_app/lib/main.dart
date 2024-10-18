@@ -24,10 +24,6 @@ Future<void> main() async {
   final notifyHelper = NotifyHelper();
   notifyHelper.requestPermission(permission: Permission.notification);
   notifyHelper.initializeNotification();
-
-  notifyHelper.displayNotification(
-      title: "Test Notification", body: "This is the test notification");
-
   final box = GetStorage();
   final userUid = box.read('userId') ?? 'defaultUserId';
 
@@ -45,7 +41,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-        title: 'Remindify',
+        title: 'reminder_app',
         debugShowCheckedModeBanner: false,
         theme: Themes.light,
         themeMode: ThemeService().theme,

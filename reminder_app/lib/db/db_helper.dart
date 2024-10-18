@@ -53,7 +53,6 @@ class DbHelper {
 
       if (querySnapshot.docs.isNotEmpty) {
         for (var doc in querySnapshot.docs) {
-         
           NotifyHelper().scheduleNotificationBasedOnData(
             userUid: userUid,
             docId: doc.id,
@@ -174,6 +173,4 @@ class DbHelper {
       return {'title': 'Error', 'description': 'Error'};
     }
   }
-
-  
 }
